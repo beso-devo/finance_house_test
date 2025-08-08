@@ -19,7 +19,6 @@ abstract class MainPageState
   bool get beneficiariesLoaded;
   List<BeneficiaryEntity> get beneficiaries;
 
-  bool get errorAddNewBeneficiary;
   bool get newBeneficiaryAdded;
 
   Failure? get failure;
@@ -35,15 +34,7 @@ abstract class MainPageState
       ..isLoadingBeneficiaries = false
       ..errorLoadingBeneficiaries = false
       ..beneficiariesLoaded = false
-      ..errorAddNewBeneficiary = false
       ..newBeneficiaryAdded = false
-      ..beneficiaries = [
-        BeneficiaryEntity(
-            id: 1, nickName: 'Amit Pahandit', phoneNumber: '+971552711410'),
-        BeneficiaryEntity(
-            id: 2, nickName: 'Kumar Suresh', phoneNumber: '+971504141232'),
-        BeneficiaryEntity(
-            id: 3, nickName: 'Amit Pahandit', phoneNumber: '+971523342424'),
-      ]);
+      ..beneficiaries = []);
   }
 }

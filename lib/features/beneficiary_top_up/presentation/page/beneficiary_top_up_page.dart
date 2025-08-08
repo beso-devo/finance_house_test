@@ -35,17 +35,15 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
         if (state.amountTransferred) {
           Navigator.pop(context, {"historyItem": state.newTopUpEntity});
         }
-        if (state.errorToppingUp) {
-          if (state.failure != null &&
-              (state.failure as ServerFailure).errorCode ==
-                  ErrorCode.INSUFFICIENT_BALANCE)
-            exceptionFlushBar(
-                title: "Error!",
-                context: context,
-                message: "Insufficient balance!",
-                duration: Duration(milliseconds: 1750),
-                onChangeStatus: (status) {},
-                onHidden: () {});
+        if (state.failure != null && (state.failure is ServerFailure)) {
+          exceptionFlushBar(
+            title: (state.failure as ServerFailure).title ?? "Error!",
+            context: context,
+            message: (state.failure as ServerFailure).message ?? "Error; Undefined Message!",
+            duration: Duration(milliseconds: 1750),
+            onChangeStatus: (status) {},
+            onHidden: () {},
+          );
           _bloc.onClearErrors();
         }
       },
@@ -53,39 +51,33 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
         bloc: _bloc,
         builder: (context, BeneficiaryTopUpState state) {
           return Scaffold(
-              key: scaffoldState,
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(0.0),
-                  child: AppBar(
-                    backgroundColor: Color(0xffF8F7F7),
-                    elevation: 0.0,
-                  )),
-              body: OrientationBuilder(
-                builder: (BuildContext context, Orientation orientation) {
-                  if (MediaQuery.of(context).orientation ==
-                      Orientation.portrait) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          child: Column(children: [
+            key: scaffoldState,
+            backgroundColor: Colors.white,
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(0.0),
+              child: AppBar(backgroundColor: Color(0xffF8F7F7), elevation: 0.0),
+            ),
+            body: OrientationBuilder(
+              builder: (BuildContext context, Orientation orientation) {
+                if (MediaQuery.of(context).orientation ==
+                    Orientation.portrait) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics(),
+                        ),
+                        child: Column(
+                          children: [
                             headerPage(),
-                            SizedBox(
-                              height: 35,
-                            ),
+                            SizedBox(height: 35),
                             formAddBeneficiary(state),
-                            SizedBox(
-                              height: 12.0,
-                            ),
+                            SizedBox(height: 12.0),
                             fixedAmountsWidget(state),
-                            SizedBox(
-                              height: 12.0,
-                            ),
+                            SizedBox(height: 12.0),
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
@@ -94,76 +86,72 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
                                 child: SubmitButtonWidget(
                                   color: MAIN1,
                                   title: "Top Up",
-                                  onTap: () => _bloc
-                                      .onTopUpSubmit(widget.beneficiaryEntity),
+                                  onTap:
+                                      () => _bloc.onTopUpSubmit(
+                                        widget.beneficiaryEntity,
+                                      ),
                                   isLoading: false,
                                 ),
                               ),
-                            )
-                          ]),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  headerPage(),
-                                ],
-                              ),
-                            ),
+                    ),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: (MediaQuery.of(context).size.width / 2) - 10,
+                          height: MediaQuery.of(context).size.height,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(children: [headerPage()]),
                           ),
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 12.0,
-                                  ),
-                                  formAddBeneficiary(state),
-                                  fixedAmountsWidget(state),
-                                  SizedBox(
-                                    height: 12.0,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      height: 65,
-                                      color: WHITE,
-                                      child: SubmitButtonWidget(
-                                        color: MAIN1,
-                                        title: "Top Up",
-                                        onTap: () => _bloc.onTopUpSubmit(
-                                            widget.beneficiaryEntity),
-                                        isLoading: false,
-                                      ),
+                        ),
+                        Container(
+                          width: (MediaQuery.of(context).size.width / 2) - 10,
+                          height: MediaQuery.of(context).size.height,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 12.0),
+                                formAddBeneficiary(state),
+                                fixedAmountsWidget(state),
+                                SizedBox(height: 12.0),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    height: 65,
+                                    color: WHITE,
+                                    child: SubmitButtonWidget(
+                                      color: MAIN1,
+                                      title: "Top Up",
+                                      onTap:
+                                          () => _bloc.onTopUpSubmit(
+                                            widget.beneficiaryEntity,
+                                          ),
+                                      isLoading: false,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 8.0,
-                                  )
-                                ],
-                              ),
+                                ),
+                                SizedBox(height: 8.0),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-              ));
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+          );
         },
       ),
     );
@@ -172,41 +160,48 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
   Widget fixedAmountsWidget(BeneficiaryTopUpState state) {
     return Wrap(
       children: List.generate(
-          state.fixedAmounts.length,
-          (index) => Padding(
-                padding: const EdgeInsets.only(left: 4.0, right: 4.0, top: 4.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _bloc.onAmountChanged(state.fixedAmounts[index].toString());
-                    amountController.text =
-                        state.fixedAmounts[index].toString();
-                  },
-                  child: Container(
-                    width: 80,
-                    decoration: getFixedAmountBoxDecoration(
-                        state.fixedAmounts[index], state),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 8.0),
-                        child: Text(
-                          "AED ${state.fixedAmounts[index]}",
-                          style: TextStyle(
-                              color: state.amount.isNotEmpty &&
-                                      _bloc.inputValidators
-                                          .isNumeric(state.amount) &&
-                                      num.parse(state.amount) ==
-                                          state.fixedAmounts[index]
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
+        state.fixedAmounts.length,
+        (index) => Padding(
+          padding: const EdgeInsets.only(left: 4.0, right: 4.0, top: 4.0),
+          child: GestureDetector(
+            onTap: () {
+              _bloc.onAmountChanged(state.fixedAmounts[index].toString());
+              amountController.text = state.fixedAmounts[index].toString();
+            },
+            child: Container(
+              width: 80,
+              decoration: getFixedAmountBoxDecoration(
+                state.fixedAmounts[index],
+                state,
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6.0,
+                    vertical: 8.0,
+                  ),
+                  child: Text(
+                    "AED ${state.fixedAmounts[index]}",
+                    style: TextStyle(
+                      color:
+                          state.amount.isNotEmpty &&
+                                  _bloc.inputValidators.isNumeric(
+                                    state.amount,
+                                  ) &&
+                                  num.parse(state.amount) ==
+                                      state.fixedAmounts[index]
+                              ? Colors.white
+                              : Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              )),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -214,18 +209,16 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
     return Column(
       children: [
         InputTextField(
-            title: 'ss',
-            hintText: "Amount: 250...",
-            inputType: TextInputType.number,
-            onSubmit: (val) {},
-            onChanged: _bloc.onAmountChanged,
-            controller: amountController,
-            showError: state.errorAmountValidation,
-            errorText: "Invalid input!",
-            prefixIcon: Icon(
-              Icons.text_fields,
-              size: 20.0,
-            )),
+          title: 'ss',
+          hintText: "Amount: 250...",
+          inputType: TextInputType.number,
+          onSubmit: (val) {},
+          onChanged: _bloc.onAmountChanged,
+          controller: amountController,
+          showError: state.errorAmountValidation,
+          errorText: "Invalid input!",
+          prefixIcon: Icon(Icons.text_fields, size: 20.0),
+        ),
       ],
     );
   }
@@ -233,9 +226,7 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
   Widget headerPage() {
     return Column(
       children: [
-        SizedBox(
-          height: 12.0,
-        ),
+        SizedBox(height: 12.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -244,7 +235,10 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
                 "Top Up (${widget.beneficiaryEntity.nickName})",
                 maxLines: 2,
                 style: TextStyle(
-                    color: MAIN1, fontSize: 14.sp, fontWeight: FontWeight.bold),
+                  color: MAIN1,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             InkWell(
@@ -253,7 +247,9 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: TEXT_FIELD_COLOR),
+                  shape: BoxShape.circle,
+                  color: TEXT_FIELD_COLOR,
+                ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5.0),
                   child: Center(
@@ -265,12 +261,10 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
-        SizedBox(
-          height: 6.0,
-        ),
+        SizedBox(height: 6.0),
         Container(
           width: MediaQuery.of(context).size.width,
           child: Text(
@@ -279,33 +273,36 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
             overflow: TextOverflow.ellipsis,
             style: TextStyle(color: DARK_OFF_FONT, fontSize: 15.0),
           ),
-        )
+        ),
       ],
     );
   }
 
   BoxDecoration getFixedAmountBoxDecoration(
-      int val, BeneficiaryTopUpState state) {
+    int val,
+    BeneficiaryTopUpState state,
+  ) {
     if (state.amount.isNotEmpty &&
         _bloc.inputValidators.isNumeric(state.amount) &&
         num.parse(state.amount) == val) {
       return BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          gradient:
-              LinearGradient(colors: [Color(0xff5269B3), Color(0XFF6E8ECD)]),
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 5, color: Colors.black12, offset: Offset(0, 3))
-          ]);
+        borderRadius: BorderRadius.all(Radius.circular(25)),
+        gradient: LinearGradient(
+          colors: [Color(0xff5269B3), Color(0XFF6E8ECD)],
+        ),
+        boxShadow: [
+          BoxShadow(blurRadius: 5, color: Colors.black12, offset: Offset(0, 3)),
+        ],
+      );
     } else {
       return BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          color: Colors.white,
-          border: Border.all(color: MAIN1),
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 5, color: Colors.black12, offset: Offset(0, 3))
-          ]);
+        borderRadius: BorderRadius.all(Radius.circular(25)),
+        color: Colors.white,
+        border: Border.all(color: MAIN1),
+        boxShadow: [
+          BoxShadow(blurRadius: 5, color: Colors.black12, offset: Offset(0, 3)),
+        ],
+      );
     }
   }
 }

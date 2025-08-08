@@ -31,7 +31,7 @@ class _$SignUpState extends SignUpState {
   final SignUpParams signUpParams;
 
   factory _$SignUpState([void Function(SignUpStateBuilder)? updates]) =>
-      (new SignUpStateBuilder()..update(updates))._build();
+      (SignUpStateBuilder()..update(updates))._build();
 
   _$SignUpState._(
       {required this.errorEmailValidation,
@@ -45,37 +45,13 @@ class _$SignUpState extends SignUpState {
       required this.userSignedUp,
       required this.errorLatLongValidation,
       required this.signUpParams})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        errorEmailValidation, r'SignUpState', 'errorEmailValidation');
-    BuiltValueNullFieldError.checkNotNull(errorPhoneNumberValidation,
-        r'SignUpState', 'errorPhoneNumberValidation');
-    BuiltValueNullFieldError.checkNotNull(
-        errorPasswordValidation, r'SignUpState', 'errorPasswordValidation');
-    BuiltValueNullFieldError.checkNotNull(errorConfirmPasswordValidation,
-        r'SignUpState', 'errorConfirmPasswordValidation');
-    BuiltValueNullFieldError.checkNotNull(
-        isPasswordObscured, r'SignUpState', 'isPasswordObscured');
-    BuiltValueNullFieldError.checkNotNull(
-        isConfirmPasswordObscured, r'SignUpState', 'isConfirmPasswordObscured');
-    BuiltValueNullFieldError.checkNotNull(
-        isSigningUp, r'SignUpState', 'isSigningUp');
-    BuiltValueNullFieldError.checkNotNull(
-        errorInSigningUp, r'SignUpState', 'errorInSigningUp');
-    BuiltValueNullFieldError.checkNotNull(
-        userSignedUp, r'SignUpState', 'userSignedUp');
-    BuiltValueNullFieldError.checkNotNull(
-        errorLatLongValidation, r'SignUpState', 'errorLatLongValidation');
-    BuiltValueNullFieldError.checkNotNull(
-        signUpParams, r'SignUpState', 'signUpParams');
-  }
-
+      : super._();
   @override
   SignUpState rebuild(void Function(SignUpStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  SignUpStateBuilder toBuilder() => new SignUpStateBuilder()..replace(this);
+  SignUpStateBuilder toBuilder() => SignUpStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -212,7 +188,6 @@ class SignUpStateBuilder implements Builder<SignUpState, SignUpStateBuilder> {
 
   @override
   void replace(SignUpState other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SignUpState;
   }
 
@@ -226,27 +201,38 @@ class SignUpStateBuilder implements Builder<SignUpState, SignUpStateBuilder> {
 
   _$SignUpState _build() {
     final _$result = _$v ??
-        new _$SignUpState._(
-            errorEmailValidation: BuiltValueNullFieldError.checkNotNull(
-                errorEmailValidation, r'SignUpState', 'errorEmailValidation'),
-            errorPhoneNumberValidation: BuiltValueNullFieldError.checkNotNull(
-                errorPhoneNumberValidation, r'SignUpState', 'errorPhoneNumberValidation'),
-            errorPasswordValidation: BuiltValueNullFieldError.checkNotNull(
-                errorPasswordValidation, r'SignUpState', 'errorPasswordValidation'),
-            errorConfirmPasswordValidation:
-                BuiltValueNullFieldError.checkNotNull(
-                    errorConfirmPasswordValidation,
-                    r'SignUpState',
-                    'errorConfirmPasswordValidation'),
-            isPasswordObscured: BuiltValueNullFieldError.checkNotNull(
-                isPasswordObscured, r'SignUpState', 'isPasswordObscured'),
-            isConfirmPasswordObscured: BuiltValueNullFieldError.checkNotNull(
-                isConfirmPasswordObscured, r'SignUpState', 'isConfirmPasswordObscured'),
-            isSigningUp: BuiltValueNullFieldError.checkNotNull(isSigningUp, r'SignUpState', 'isSigningUp'),
-            errorInSigningUp: BuiltValueNullFieldError.checkNotNull(errorInSigningUp, r'SignUpState', 'errorInSigningUp'),
-            userSignedUp: BuiltValueNullFieldError.checkNotNull(userSignedUp, r'SignUpState', 'userSignedUp'),
-            errorLatLongValidation: BuiltValueNullFieldError.checkNotNull(errorLatLongValidation, r'SignUpState', 'errorLatLongValidation'),
-            signUpParams: BuiltValueNullFieldError.checkNotNull(signUpParams, r'SignUpState', 'signUpParams'));
+        _$SignUpState._(
+          errorEmailValidation: BuiltValueNullFieldError.checkNotNull(
+              errorEmailValidation, r'SignUpState', 'errorEmailValidation'),
+          errorPhoneNumberValidation: BuiltValueNullFieldError.checkNotNull(
+              errorPhoneNumberValidation,
+              r'SignUpState',
+              'errorPhoneNumberValidation'),
+          errorPasswordValidation: BuiltValueNullFieldError.checkNotNull(
+              errorPasswordValidation,
+              r'SignUpState',
+              'errorPasswordValidation'),
+          errorConfirmPasswordValidation: BuiltValueNullFieldError.checkNotNull(
+              errorConfirmPasswordValidation,
+              r'SignUpState',
+              'errorConfirmPasswordValidation'),
+          isPasswordObscured: BuiltValueNullFieldError.checkNotNull(
+              isPasswordObscured, r'SignUpState', 'isPasswordObscured'),
+          isConfirmPasswordObscured: BuiltValueNullFieldError.checkNotNull(
+              isConfirmPasswordObscured,
+              r'SignUpState',
+              'isConfirmPasswordObscured'),
+          isSigningUp: BuiltValueNullFieldError.checkNotNull(
+              isSigningUp, r'SignUpState', 'isSigningUp'),
+          errorInSigningUp: BuiltValueNullFieldError.checkNotNull(
+              errorInSigningUp, r'SignUpState', 'errorInSigningUp'),
+          userSignedUp: BuiltValueNullFieldError.checkNotNull(
+              userSignedUp, r'SignUpState', 'userSignedUp'),
+          errorLatLongValidation: BuiltValueNullFieldError.checkNotNull(
+              errorLatLongValidation, r'SignUpState', 'errorLatLongValidation'),
+          signUpParams: BuiltValueNullFieldError.checkNotNull(
+              signUpParams, r'SignUpState', 'signUpParams'),
+        );
     replace(_$result);
     return _$result;
   }

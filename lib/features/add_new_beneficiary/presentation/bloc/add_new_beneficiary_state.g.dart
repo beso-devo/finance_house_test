@@ -21,10 +21,12 @@ class _$AddNewBeneficiaryState extends AddNewBeneficiaryState {
   final bool beneficiaryAdded;
   @override
   final BeneficiaryEntity? newBeneficiary;
+  @override
+  final Failure? failure;
 
   factory _$AddNewBeneficiaryState(
           [void Function(AddNewBeneficiaryStateBuilder)? updates]) =>
-      (new AddNewBeneficiaryStateBuilder()..update(updates))._build();
+      (AddNewBeneficiaryStateBuilder()..update(updates))._build();
 
   _$AddNewBeneficiaryState._(
       {required this.errorPhoneNumberValidation,
@@ -33,22 +35,9 @@ class _$AddNewBeneficiaryState extends AddNewBeneficiaryState {
       required this.isAddingBeneficiary,
       required this.errorAddingBeneficiary,
       required this.beneficiaryAdded,
-      this.newBeneficiary})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(errorPhoneNumberValidation,
-        r'AddNewBeneficiaryState', 'errorPhoneNumberValidation');
-    BuiltValueNullFieldError.checkNotNull(errorNicknameValidation,
-        r'AddNewBeneficiaryState', 'errorNicknameValidation');
-    BuiltValueNullFieldError.checkNotNull(submitNewBeneficiaryParams,
-        r'AddNewBeneficiaryState', 'submitNewBeneficiaryParams');
-    BuiltValueNullFieldError.checkNotNull(
-        isAddingBeneficiary, r'AddNewBeneficiaryState', 'isAddingBeneficiary');
-    BuiltValueNullFieldError.checkNotNull(errorAddingBeneficiary,
-        r'AddNewBeneficiaryState', 'errorAddingBeneficiary');
-    BuiltValueNullFieldError.checkNotNull(
-        beneficiaryAdded, r'AddNewBeneficiaryState', 'beneficiaryAdded');
-  }
-
+      this.newBeneficiary,
+      this.failure})
+      : super._();
   @override
   AddNewBeneficiaryState rebuild(
           void Function(AddNewBeneficiaryStateBuilder) updates) =>
@@ -56,7 +45,7 @@ class _$AddNewBeneficiaryState extends AddNewBeneficiaryState {
 
   @override
   AddNewBeneficiaryStateBuilder toBuilder() =>
-      new AddNewBeneficiaryStateBuilder()..replace(this);
+      AddNewBeneficiaryStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -68,7 +57,8 @@ class _$AddNewBeneficiaryState extends AddNewBeneficiaryState {
         isAddingBeneficiary == other.isAddingBeneficiary &&
         errorAddingBeneficiary == other.errorAddingBeneficiary &&
         beneficiaryAdded == other.beneficiaryAdded &&
-        newBeneficiary == other.newBeneficiary;
+        newBeneficiary == other.newBeneficiary &&
+        failure == other.failure;
   }
 
   @override
@@ -81,6 +71,7 @@ class _$AddNewBeneficiaryState extends AddNewBeneficiaryState {
     _$hash = $jc(_$hash, errorAddingBeneficiary.hashCode);
     _$hash = $jc(_$hash, beneficiaryAdded.hashCode);
     _$hash = $jc(_$hash, newBeneficiary.hashCode);
+    _$hash = $jc(_$hash, failure.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -94,7 +85,8 @@ class _$AddNewBeneficiaryState extends AddNewBeneficiaryState {
           ..add('isAddingBeneficiary', isAddingBeneficiary)
           ..add('errorAddingBeneficiary', errorAddingBeneficiary)
           ..add('beneficiaryAdded', beneficiaryAdded)
-          ..add('newBeneficiary', newBeneficiary))
+          ..add('newBeneficiary', newBeneficiary)
+          ..add('failure', failure))
         .toString();
   }
 }
@@ -140,6 +132,10 @@ class AddNewBeneficiaryStateBuilder
   set newBeneficiary(BeneficiaryEntity? newBeneficiary) =>
       _$this._newBeneficiary = newBeneficiary;
 
+  Failure? _failure;
+  Failure? get failure => _$this._failure;
+  set failure(Failure? failure) => _$this._failure = failure;
+
   AddNewBeneficiaryStateBuilder();
 
   AddNewBeneficiaryStateBuilder get _$this {
@@ -152,6 +148,7 @@ class AddNewBeneficiaryStateBuilder
       _errorAddingBeneficiary = $v.errorAddingBeneficiary;
       _beneficiaryAdded = $v.beneficiaryAdded;
       _newBeneficiary = $v.newBeneficiary;
+      _failure = $v.failure;
       _$v = null;
     }
     return this;
@@ -159,7 +156,6 @@ class AddNewBeneficiaryStateBuilder
 
   @override
   void replace(AddNewBeneficiaryState other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$AddNewBeneficiaryState;
   }
 
@@ -173,24 +169,32 @@ class AddNewBeneficiaryStateBuilder
 
   _$AddNewBeneficiaryState _build() {
     final _$result = _$v ??
-        new _$AddNewBeneficiaryState._(
-            errorPhoneNumberValidation: BuiltValueNullFieldError.checkNotNull(
-                errorPhoneNumberValidation,
-                r'AddNewBeneficiaryState',
-                'errorPhoneNumberValidation'),
-            errorNicknameValidation: BuiltValueNullFieldError.checkNotNull(
-                errorNicknameValidation, r'AddNewBeneficiaryState', 'errorNicknameValidation'),
-            submitNewBeneficiaryParams: BuiltValueNullFieldError.checkNotNull(
-                submitNewBeneficiaryParams,
-                r'AddNewBeneficiaryState',
-                'submitNewBeneficiaryParams'),
-            isAddingBeneficiary: BuiltValueNullFieldError.checkNotNull(
-                isAddingBeneficiary, r'AddNewBeneficiaryState', 'isAddingBeneficiary'),
-            errorAddingBeneficiary: BuiltValueNullFieldError.checkNotNull(
-                errorAddingBeneficiary, r'AddNewBeneficiaryState', 'errorAddingBeneficiary'),
-            beneficiaryAdded: BuiltValueNullFieldError.checkNotNull(
-                beneficiaryAdded, r'AddNewBeneficiaryState', 'beneficiaryAdded'),
-            newBeneficiary: newBeneficiary);
+        _$AddNewBeneficiaryState._(
+          errorPhoneNumberValidation: BuiltValueNullFieldError.checkNotNull(
+              errorPhoneNumberValidation,
+              r'AddNewBeneficiaryState',
+              'errorPhoneNumberValidation'),
+          errorNicknameValidation: BuiltValueNullFieldError.checkNotNull(
+              errorNicknameValidation,
+              r'AddNewBeneficiaryState',
+              'errorNicknameValidation'),
+          submitNewBeneficiaryParams: BuiltValueNullFieldError.checkNotNull(
+              submitNewBeneficiaryParams,
+              r'AddNewBeneficiaryState',
+              'submitNewBeneficiaryParams'),
+          isAddingBeneficiary: BuiltValueNullFieldError.checkNotNull(
+              isAddingBeneficiary,
+              r'AddNewBeneficiaryState',
+              'isAddingBeneficiary'),
+          errorAddingBeneficiary: BuiltValueNullFieldError.checkNotNull(
+              errorAddingBeneficiary,
+              r'AddNewBeneficiaryState',
+              'errorAddingBeneficiary'),
+          beneficiaryAdded: BuiltValueNullFieldError.checkNotNull(
+              beneficiaryAdded, r'AddNewBeneficiaryState', 'beneficiaryAdded'),
+          newBeneficiary: newBeneficiary,
+          failure: failure,
+        );
     replace(_$result);
     return _$result;
   }

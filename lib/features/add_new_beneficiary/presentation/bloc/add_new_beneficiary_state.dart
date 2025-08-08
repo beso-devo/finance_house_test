@@ -1,4 +1,5 @@
 import 'package:built_value/built_value.dart';
+import 'package:finance_house_test/core/error/failures.dart';
 
 import '../../../../core/domain/entity/beneficiary_entity.dart';
 import '../../domain/usecases/add_new_beneficiary_usecase.dart';
@@ -21,6 +22,9 @@ abstract class AddNewBeneficiaryState
   bool get errorAddingBeneficiary;
   bool get beneficiaryAdded;
   BeneficiaryEntity? get newBeneficiary;
+
+  Failure? get failure;
+
 
   factory AddNewBeneficiaryState.initial() {
     return AddNewBeneficiaryState((b) => b

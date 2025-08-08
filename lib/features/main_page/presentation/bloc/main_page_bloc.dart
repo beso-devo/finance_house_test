@@ -46,7 +46,6 @@ class MainPageBloc extends Bloc<MainPageEvent, MainPageState> {
     } else if (event is ClearErrors) {
       yield state.rebuild((p0) => p0
         ..failure = null
-        ..errorAddNewBeneficiary = false
         ..newBeneficiaryAdded = false);
     } else if (event is TopUpAdded) {
       yield state
@@ -67,7 +66,6 @@ class MainPageBloc extends Bloc<MainPageEvent, MainPageState> {
         ..newBeneficiaryAdded = true);
     } else {
       yield state.rebuild((p0) => p0
-        ..errorAddNewBeneficiary = true
         ..failure = ServerFailure(ErrorCode.ERROR_ADD_BENEFICIARY));
     }
   }

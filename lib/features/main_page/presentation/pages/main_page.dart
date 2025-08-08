@@ -32,15 +32,6 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
     return BlocListener(
       bloc: _bloc,
       listener: (BuildContext context, MainPageState state) {
-        if (state.errorAddNewBeneficiary) {
-          exceptionFlushBar(
-              title: "Beneficiary not added!",
-              message: "You can't add more than 5 beneficiary!",
-              context: context,
-              onChangeStatus: (status) {},
-              onHidden: () {});
-          _bloc.onClearErrors();
-        }
         if (state.newBeneficiaryAdded) {
           doneFlushBar(
             title: 'Added!',
@@ -64,27 +55,27 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
               title: Text(
                 "Beneficiaries",
                 style: TextStyle(
-                    fontSize: 14.sp,
-                    color: MAIN1,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Lobster"),
+                  fontSize: 14.sp,
+                  color: MAIN1,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Lobster",
+                ),
               ),
               actions: [
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, GeneralScreens.ADD_BENEFICIARY)
-                        .then((value) {
+                    Navigator.pushNamed(
+                      context,
+                      GeneralScreens.ADD_BENEFICIARY,
+                    ).then((value) {
                       if (value != null &&
                           (value as Map)["beneficiary"] != null) {
                         _bloc.onAddNewBeneficiary((value)["beneficiary"]);
                       }
                     });
                   },
-                  icon: Icon(
-                    Icons.add,
-                    color: MAIN1,
-                  ),
-                )
+                  icon: Icon(Icons.add, color: MAIN1),
+                ),
               ],
             ),
             body: Padding(
@@ -92,25 +83,10 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
               child: Column(
                 children: [
                   balanceWidget(state, context),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                    height: 130,
-                    width: context.w,
-                    child: ListView.builder(
-                        itemCount: state.beneficiaries.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) {
-                          return BeneficiaryCard(
-                              beneficiaryEntity: state.beneficiaries[index],
-                              onTopUpAdded: _bloc.onTopUpAdded);
-                        }),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  getHistoryWidget(state)
+                  SizedBox(height: 10),
+                  beneficiariesWidget(state),
+                  SizedBox(height: 10),
+                  getHistoryWidget(state),
                 ],
               ),
             ),
@@ -120,73 +96,106 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
     );
   }
 
+  Widget beneficiariesWidget(MainPageState state) {
+    if (state.beneficiaries.isEmpty) {
+      return SizedBox(
+        height: 130,
+        width: context.w,
+        child: Center(child: Text("No beneficiaries found!")),
+      );
+    }
+    return SizedBox(
+      height: 130,
+      width: context.w,
+      child: ListView.builder(
+        itemCount: state.beneficiaries.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index) {
+          return BeneficiaryCard(
+            beneficiaryEntity: state.beneficiaries[index],
+            onTopUpAdded: _bloc.onTopUpAdded,
+          );
+        },
+      ),
+    );
+  }
+
   Widget getHistoryWidget(MainPageState state) {
     return Expanded(
-        child: ListView.builder(
-            itemCount: state.historyTopUPs.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  index == 0
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 10),
-                          child: Text(
-                            "History Top UPs",
-                            style: TextStyle(
-                                color: MAIN1,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      : Container(),
-                  HistoryItemWidget(
-                    topUpEntity: state.historyTopUPs[index],
-                  ),
-                ],
-              );
-            }));
+      child: ListView.builder(
+        itemCount: state.historyTopUPs.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              index == 0
+                  ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      "History Top UPs",
+                      style: TextStyle(
+                        color: MAIN1,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                  : Container(),
+              HistoryItemWidget(topUpEntity: state.historyTopUPs[index]),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   Widget balanceWidget(MainPageState state, BuildContext context) {
     return state.currentUser == null
         ? Container()
         : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: state.currentUser!.isVerified ? MAIN2 : Colors.red,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(8),
-                        bottomRight: Radius.circular(8))),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    state.currentUser!.isVerified
-                        ? "User verified"
-                        : "User is not verified!",
-                    style: TextStyle(color: Colors.white),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: state.currentUser!.isVerified ? MAIN2 : Colors.red,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  state.currentUser!.isVerified
+                      ? "User verified"
+                      : "User is not verified!",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  bottomLeft: Radius.circular(8),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Balance: ${state.currentUser!.balance.toStringAsFixed(2)} AED",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        bottomLeft: Radius.circular(8))),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Balance: ${state.currentUser!.balance.toStringAsFixed(2)} AED",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
-          );
+            ),
+          ],
+        );
   }
 }

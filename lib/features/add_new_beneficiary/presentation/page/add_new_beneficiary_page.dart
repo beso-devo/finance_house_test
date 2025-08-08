@@ -1,3 +1,4 @@
+import 'package:finance_house_test/core/error/failures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -29,6 +30,16 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
       listener: (BuildContext context, AddNewBeneficiaryState state) {
         if (state.beneficiaryAdded) {
           Navigator.pop(context, {"beneficiary": state.newBeneficiary});
+        }
+        if(state.failure != null && (state.failure is ServerFailure)){
+          exceptionFlushBar(
+              title: (state.failure as ServerFailure).title ?? "Error!",
+              context: context,
+              message: (state.failure as ServerFailure).message ?? "Error; Undefined Message!",
+              duration: Duration(milliseconds: 2750),
+              onChangeStatus: (status) {},
+              onHidden: () {});
+          _bloc.onClearErrors();
         }
       },
       child: BlocBuilder(

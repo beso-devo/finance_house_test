@@ -20,8 +20,6 @@ class _$MainPageState extends MainPageState {
   @override
   final List<BeneficiaryEntity> beneficiaries;
   @override
-  final bool errorAddNewBeneficiary;
-  @override
   final bool newBeneficiaryAdded;
   @override
   final Failure? failure;
@@ -29,7 +27,7 @@ class _$MainPageState extends MainPageState {
   final List<TopUpEntity> historyTopUPs;
 
   factory _$MainPageState([void Function(MainPageStateBuilder)? updates]) =>
-      (new MainPageStateBuilder()..update(updates))._build();
+      (MainPageStateBuilder()..update(updates))._build();
 
   _$MainPageState._(
       {this.currentUser,
@@ -38,35 +36,16 @@ class _$MainPageState extends MainPageState {
       required this.errorLoadingBeneficiaries,
       required this.beneficiariesLoaded,
       required this.beneficiaries,
-      required this.errorAddNewBeneficiary,
       required this.newBeneficiaryAdded,
       this.failure,
       required this.historyTopUPs})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        isLoadingInfo, r'MainPageState', 'isLoadingInfo');
-    BuiltValueNullFieldError.checkNotNull(
-        isLoadingBeneficiaries, r'MainPageState', 'isLoadingBeneficiaries');
-    BuiltValueNullFieldError.checkNotNull(errorLoadingBeneficiaries,
-        r'MainPageState', 'errorLoadingBeneficiaries');
-    BuiltValueNullFieldError.checkNotNull(
-        beneficiariesLoaded, r'MainPageState', 'beneficiariesLoaded');
-    BuiltValueNullFieldError.checkNotNull(
-        beneficiaries, r'MainPageState', 'beneficiaries');
-    BuiltValueNullFieldError.checkNotNull(
-        errorAddNewBeneficiary, r'MainPageState', 'errorAddNewBeneficiary');
-    BuiltValueNullFieldError.checkNotNull(
-        newBeneficiaryAdded, r'MainPageState', 'newBeneficiaryAdded');
-    BuiltValueNullFieldError.checkNotNull(
-        historyTopUPs, r'MainPageState', 'historyTopUPs');
-  }
-
+      : super._();
   @override
   MainPageState rebuild(void Function(MainPageStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  MainPageStateBuilder toBuilder() => new MainPageStateBuilder()..replace(this);
+  MainPageStateBuilder toBuilder() => MainPageStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -78,7 +57,6 @@ class _$MainPageState extends MainPageState {
         errorLoadingBeneficiaries == other.errorLoadingBeneficiaries &&
         beneficiariesLoaded == other.beneficiariesLoaded &&
         beneficiaries == other.beneficiaries &&
-        errorAddNewBeneficiary == other.errorAddNewBeneficiary &&
         newBeneficiaryAdded == other.newBeneficiaryAdded &&
         failure == other.failure &&
         historyTopUPs == other.historyTopUPs;
@@ -93,7 +71,6 @@ class _$MainPageState extends MainPageState {
     _$hash = $jc(_$hash, errorLoadingBeneficiaries.hashCode);
     _$hash = $jc(_$hash, beneficiariesLoaded.hashCode);
     _$hash = $jc(_$hash, beneficiaries.hashCode);
-    _$hash = $jc(_$hash, errorAddNewBeneficiary.hashCode);
     _$hash = $jc(_$hash, newBeneficiaryAdded.hashCode);
     _$hash = $jc(_$hash, failure.hashCode);
     _$hash = $jc(_$hash, historyTopUPs.hashCode);
@@ -110,7 +87,6 @@ class _$MainPageState extends MainPageState {
           ..add('errorLoadingBeneficiaries', errorLoadingBeneficiaries)
           ..add('beneficiariesLoaded', beneficiariesLoaded)
           ..add('beneficiaries', beneficiaries)
-          ..add('errorAddNewBeneficiary', errorAddNewBeneficiary)
           ..add('newBeneficiaryAdded', newBeneficiaryAdded)
           ..add('failure', failure)
           ..add('historyTopUPs', historyTopUPs))
@@ -151,11 +127,6 @@ class MainPageStateBuilder
   set beneficiaries(List<BeneficiaryEntity>? beneficiaries) =>
       _$this._beneficiaries = beneficiaries;
 
-  bool? _errorAddNewBeneficiary;
-  bool? get errorAddNewBeneficiary => _$this._errorAddNewBeneficiary;
-  set errorAddNewBeneficiary(bool? errorAddNewBeneficiary) =>
-      _$this._errorAddNewBeneficiary = errorAddNewBeneficiary;
-
   bool? _newBeneficiaryAdded;
   bool? get newBeneficiaryAdded => _$this._newBeneficiaryAdded;
   set newBeneficiaryAdded(bool? newBeneficiaryAdded) =>
@@ -181,7 +152,6 @@ class MainPageStateBuilder
       _errorLoadingBeneficiaries = $v.errorLoadingBeneficiaries;
       _beneficiariesLoaded = $v.beneficiariesLoaded;
       _beneficiaries = $v.beneficiaries;
-      _errorAddNewBeneficiary = $v.errorAddNewBeneficiary;
       _newBeneficiaryAdded = $v.newBeneficiaryAdded;
       _failure = $v.failure;
       _historyTopUPs = $v.historyTopUPs;
@@ -192,7 +162,6 @@ class MainPageStateBuilder
 
   @override
   void replace(MainPageState other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$MainPageState;
   }
 
@@ -206,24 +175,28 @@ class MainPageStateBuilder
 
   _$MainPageState _build() {
     final _$result = _$v ??
-        new _$MainPageState._(
-            currentUser: currentUser,
-            isLoadingInfo: BuiltValueNullFieldError.checkNotNull(
-                isLoadingInfo, r'MainPageState', 'isLoadingInfo'),
-            isLoadingBeneficiaries: BuiltValueNullFieldError.checkNotNull(
-                isLoadingBeneficiaries, r'MainPageState', 'isLoadingBeneficiaries'),
-            errorLoadingBeneficiaries: BuiltValueNullFieldError.checkNotNull(
-                errorLoadingBeneficiaries, r'MainPageState', 'errorLoadingBeneficiaries'),
-            beneficiariesLoaded: BuiltValueNullFieldError.checkNotNull(
-                beneficiariesLoaded, r'MainPageState', 'beneficiariesLoaded'),
-            beneficiaries: BuiltValueNullFieldError.checkNotNull(
-                beneficiaries, r'MainPageState', 'beneficiaries'),
-            errorAddNewBeneficiary: BuiltValueNullFieldError.checkNotNull(
-                errorAddNewBeneficiary, r'MainPageState', 'errorAddNewBeneficiary'),
-            newBeneficiaryAdded: BuiltValueNullFieldError.checkNotNull(
-                newBeneficiaryAdded, r'MainPageState', 'newBeneficiaryAdded'),
-            failure: failure,
-            historyTopUPs: BuiltValueNullFieldError.checkNotNull(historyTopUPs, r'MainPageState', 'historyTopUPs'));
+        _$MainPageState._(
+          currentUser: currentUser,
+          isLoadingInfo: BuiltValueNullFieldError.checkNotNull(
+              isLoadingInfo, r'MainPageState', 'isLoadingInfo'),
+          isLoadingBeneficiaries: BuiltValueNullFieldError.checkNotNull(
+              isLoadingBeneficiaries,
+              r'MainPageState',
+              'isLoadingBeneficiaries'),
+          errorLoadingBeneficiaries: BuiltValueNullFieldError.checkNotNull(
+              errorLoadingBeneficiaries,
+              r'MainPageState',
+              'errorLoadingBeneficiaries'),
+          beneficiariesLoaded: BuiltValueNullFieldError.checkNotNull(
+              beneficiariesLoaded, r'MainPageState', 'beneficiariesLoaded'),
+          beneficiaries: BuiltValueNullFieldError.checkNotNull(
+              beneficiaries, r'MainPageState', 'beneficiaries'),
+          newBeneficiaryAdded: BuiltValueNullFieldError.checkNotNull(
+              newBeneficiaryAdded, r'MainPageState', 'newBeneficiaryAdded'),
+          failure: failure,
+          historyTopUPs: BuiltValueNullFieldError.checkNotNull(
+              historyTopUPs, r'MainPageState', 'historyTopUPs'),
+        );
     replace(_$result);
     return _$result;
   }

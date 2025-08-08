@@ -18,24 +18,32 @@ class BeneficiaryTopUpRepositoryImpl extends BaseRepositoryImpl
     implements BeneficiaryTopUpRepository {
   final BeneficiaryTopUpRemoteDataSource addNewBeneficiaryRemoteDataSource;
 
-  BeneficiaryTopUpRepositoryImpl(
-      {required this.addNewBeneficiaryRemoteDataSource,
-      required NetworkInfo networkInfo,
-      required BaseLocalDataSource baseLocalDataSource})
-      : super(
-            baseRemoteDataSource: addNewBeneficiaryRemoteDataSource,
-            networkInfo: networkInfo,
-            baseLocalDataSource: baseLocalDataSource);
+  BeneficiaryTopUpRepositoryImpl({
+    required this.addNewBeneficiaryRemoteDataSource,
+    required NetworkInfo networkInfo,
+    required BaseLocalDataSource baseLocalDataSource,
+  }) : super(
+         baseRemoteDataSource: addNewBeneficiaryRemoteDataSource,
+         networkInfo: networkInfo,
+         baseLocalDataSource: baseLocalDataSource,
+       );
 
   @override
   Future<Either<Failure, TopUpEntity>> topUp(
-      BeneficiaryTopUpParams params) async {
+    BeneficiaryTopUpParams params,
+  ) async {
     final user = baseLocalDataSource.user;
     UserEntity userE = UserEntity.fromJson(json.decode(user!));
     if (userE.balance <= (params.amount + 1)) {
-      return Left(ServerFailure(ErrorCode.INSUFFICIENT_BALANCE));
+      return Left(
+        ServerFailure(
+          ErrorCode.INSUFFICIENT_BALANCE,
+          title: "No Balance!",
+          message: "Insufficient balance!",
+        ),
+      );
     } else {
-      /// Here I applied AED 1 for each transaction as Fees for us...
+      /// Here I applied AED 3 for each transaction as Fees for us...
       /// So only as an example so this deduction should be implemented in the
       /// backend...
       ///
@@ -75,46 +83,68 @@ class BeneficiaryTopUpRepositoryImpl extends BaseRepositoryImpl
       num totalAmount = 0.0;
       List<TopUpEntity> histories = [
         TopUpEntity(
+          id: 1,
+          beneficiaryEntity: BeneficiaryEntity(
             id: 1,
-            beneficiaryEntity: BeneficiaryEntity(
-                id: 1, nickName: 'Basel', phoneNumber: '+971552711410'),
-            amount: 15.2),
+            nickName: 'Basel',
+            phoneNumber: '+971552711410',
+          ),
+          amount: 15.2,
+        ),
         TopUpEntity(
+          id: 2,
+          beneficiaryEntity: BeneficiaryEntity(
             id: 2,
-            beneficiaryEntity: BeneficiaryEntity(
-                id: 2, nickName: 'Islam', phoneNumber: '+971553434342'),
-            amount: 30.5),
+            nickName: 'Islam',
+            phoneNumber: '+971553434342',
+          ),
+          amount: 30.5,
+        ),
         TopUpEntity(
+          id: 3,
+          beneficiaryEntity: BeneficiaryEntity(
             id: 3,
-            beneficiaryEntity: BeneficiaryEntity(
-                id: 3, nickName: 'Alaa', phoneNumber: '+9715523112121'),
-            amount: 25.4),
+            nickName: 'Alaa',
+            phoneNumber: '+9715523112121',
+          ),
+          amount: 25.4,
+        ),
         TopUpEntity(
+          id: 1,
+          beneficiaryEntity: BeneficiaryEntity(
             id: 1,
-            beneficiaryEntity: BeneficiaryEntity(
-                id: 1, nickName: 'Basel', phoneNumber: '+971552711410'),
-            amount: 100.85),
+            nickName: 'Basel',
+            phoneNumber: '+971552711410',
+          ),
+          amount: 100.85,
+        ),
       ];
       histories.forEach((element) {
         totalAmount = totalAmount + element.amount;
         if (beneficiariesAmounts.containsKey(element.beneficiaryEntity.id)) {
           beneficiariesAmounts[element.beneficiaryEntity.id] =
               beneficiariesAmounts[element.beneficiaryEntity.id]! +
-                  element.amount;
+              element.amount;
         } else {
           beneficiariesAmounts[element.beneficiaryEntity.id] = element.amount;
         }
       });
-      print("Cluster Depending on the beneficiaries' ids = " + beneficiariesAmounts.toString());
+      print(
+        "Cluster Depending on the beneficiaries' ids = " +
+            beneficiariesAmounts.toString(),
+      );
       print("Total Top UPs = " + totalAmount.toString());
       print("User Verification Status = ${currentUser.isVerified}");
 
-      userE.balance = (userE.balance - params.amount) - 1;
-      print("balance after = ${userE.balance}");
+      /// Each transaction should deduct 3 AED from user balance...
+      userE.balance = (userE.balance - params.amount) - 3;
       await baseLocalDataSource.saveUserInfo(userE);
       return requestWithToken((token, url) async {
-        final result =
-            await addNewBeneficiaryRemoteDataSource.topUp(params, token, url);
+        final result = await addNewBeneficiaryRemoteDataSource.topUp(
+          params,
+          token,
+          url,
+        );
         if (result.data == null) {
           return Left(ServerFailure(ErrorCode.SERVER_ERROR));
         } else {

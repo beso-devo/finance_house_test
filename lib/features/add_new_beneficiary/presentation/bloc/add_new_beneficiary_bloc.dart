@@ -26,6 +26,9 @@ class AddNewBeneficiaryBloc
   void onNicknameChanged(String val) {
     add(NicknameChanged(val));
   }
+  void onClearErrors() {
+    add(ClearErrors());
+  }
 
   @override
   Stream<AddNewBeneficiaryState> mapEventToState(
@@ -40,13 +43,14 @@ class AddNewBeneficiaryBloc
         ..submitNewBeneficiaryParams!.nickname = event.val);
     } else if (event is AddBeneficiary) {
       yield* mapToAddBeneficiary(event);
+    } else if(event is ClearErrors){
+      yield state.rebuild((p0) => p0..failure = null);
     }
   }
 
   Stream<AddNewBeneficiaryState> mapToAddBeneficiary(
       AddBeneficiary event) async* {
-    if (state.submitNewBeneficiaryParams.nickname.length > 20 ||
-        state.submitNewBeneficiaryParams.nickname.length < 5) {
+    if (inputValidators.validateBeneficiaryName(state.submitNewBeneficiaryParams.nickname)) {
       yield state.rebuild((p0) => p0..errorNicknameValidation = true);
     } else if (!inputValidators
         .validateUAEPhoneInput(state.submitNewBeneficiaryParams.phoneNumber)) {
@@ -67,7 +71,7 @@ class AddNewBeneficiaryBloc
       yield state.rebuild((p0) => p0
         ..isAddingBeneficiary = false
         ..errorAddingBeneficiary = true
-        ..beneficiaryAdded = false);
+        ..beneficiaryAdded = false..failure = l);
     }, (r) async* {
       yield state.rebuild((p0) => p0
         ..isAddingBeneficiary = false

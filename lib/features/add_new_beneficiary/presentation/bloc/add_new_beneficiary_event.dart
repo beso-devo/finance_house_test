@@ -13,3 +13,5 @@ class NicknameChanged extends AddNewBeneficiaryEvent {
 
   NicknameChanged(this.val);
 }
+
+class ClearErrors extends AddNewBeneficiaryEvent {}

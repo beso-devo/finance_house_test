@@ -16,7 +16,9 @@ class SignInRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
 
   @override
   Future<BaseResponseModel<UserEntity>> login(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
       /// Here we can do the request from the backend and for sure we should make the
       /// conditions and implement the code to handle the errors and display it using
@@ -29,11 +31,19 @@ class SignInRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
       //     data: UserEntity.fromJson(json.decode(result.data)['result']));
 
       return BaseResponseModel(
-          data: UserEntity(id: 1, isVerified: true, balance: 5000));
+        data: UserEntity(
+          id: 1,
+          isVerified: true,
+          balance: 5000,
+          beneficiariesCount: 0,
+        ),
+      );
     } catch (e) {
       if (e is DioException) {
         return BaseResponseModel(
-            data: null, message: json.decode(e.response?.data)['result']);
+          data: null,
+          message: json.decode(e.response?.data)['result'],
+        );
       } else {
         return BaseResponseModel(data: null, message: "");
       }

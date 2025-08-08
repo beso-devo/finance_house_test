@@ -3,9 +3,11 @@ import '../../error/failures.dart';
 
 class InputValidators {
   RegExp emailRegExp = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  RegExp passwordRegExp =
-      RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+  );
+  RegExp passwordRegExp = RegExp(
+    r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})",
+  );
 
   Either<Failure, String> validateEmailInput(String email) {
     if (email.contains('.') && email.contains('@')) {
@@ -39,6 +41,10 @@ class InputValidators {
     } else {
       return true;
     }
+  }
+
+  bool validateBeneficiaryName(String val) {
+    return (val.length > 20 || val.length < 5);
   }
 
   bool validateTopUpAmount(String val) {

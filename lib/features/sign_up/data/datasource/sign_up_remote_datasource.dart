@@ -10,7 +10,8 @@ abstract class SignUpRemoteDataSource extends BaseRemoteDataSource {
   Future<BaseResponseModel<UserEntity>> signUp(SignUpParams params);
 
   Future<BaseResponseModel<UserEntity>> continueAsGuest(
-      ContinueAsGuestParams params);
+    ContinueAsGuestParams params,
+  );
 }
 
 @LazySingleton(as: SignUpRemoteDataSource)
@@ -31,13 +32,26 @@ class SignUpRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
     //     data: UserEntity.fromJson(json.decode(result.data)['result']));
 
     return BaseResponseModel(
-        data: UserEntity(id: 1, isVerified: true, balance: 5000));
+      data: UserEntity(
+        id: 1,
+        isVerified: true,
+        balance: 5000,
+        beneficiariesCount: 0,
+      ),
+    );
   }
 
   @override
   Future<BaseResponseModel<UserEntity>> continueAsGuest(
-      ContinueAsGuestParams params) async {
+    ContinueAsGuestParams params,
+  ) async {
     return BaseResponseModel(
-        data: UserEntity(id: 1, isVerified: false, balance: 4000));
+      data: UserEntity(
+        id: 1,
+        isVerified: false,
+        balance: 4000,
+        beneficiariesCount: 0,
+      ),
+    );
   }
 }

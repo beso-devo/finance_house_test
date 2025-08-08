@@ -23,7 +23,7 @@ class _$SignInState extends SignInState {
   final SignInParams signInParams;
 
   factory _$SignInState([void Function(SignInStateBuilder)? updates]) =>
-      (new SignInStateBuilder()..update(updates))._build();
+      (SignInStateBuilder()..update(updates))._build();
 
   _$SignInState._(
       {required this.errorUserNameValidation,
@@ -33,29 +33,13 @@ class _$SignInState extends SignInState {
       required this.isSigningIn,
       required this.userSignedIn,
       required this.signInParams})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        errorUserNameValidation, r'SignInState', 'errorUserNameValidation');
-    BuiltValueNullFieldError.checkNotNull(
-        errorPasswordValidation, r'SignInState', 'errorPasswordValidation');
-    BuiltValueNullFieldError.checkNotNull(
-        errorSignIn, r'SignInState', 'errorSignIn');
-    BuiltValueNullFieldError.checkNotNull(
-        isSecureText, r'SignInState', 'isSecureText');
-    BuiltValueNullFieldError.checkNotNull(
-        isSigningIn, r'SignInState', 'isSigningIn');
-    BuiltValueNullFieldError.checkNotNull(
-        userSignedIn, r'SignInState', 'userSignedIn');
-    BuiltValueNullFieldError.checkNotNull(
-        signInParams, r'SignInState', 'signInParams');
-  }
-
+      : super._();
   @override
   SignInState rebuild(void Function(SignInStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  SignInStateBuilder toBuilder() => new SignInStateBuilder()..replace(this);
+  SignInStateBuilder toBuilder() => SignInStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -151,7 +135,6 @@ class SignInStateBuilder implements Builder<SignInState, SignInStateBuilder> {
 
   @override
   void replace(SignInState other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SignInState;
   }
 
@@ -165,25 +148,26 @@ class SignInStateBuilder implements Builder<SignInState, SignInStateBuilder> {
 
   _$SignInState _build() {
     final _$result = _$v ??
-        new _$SignInState._(
-            errorUserNameValidation: BuiltValueNullFieldError.checkNotNull(
-                errorUserNameValidation,
-                r'SignInState',
-                'errorUserNameValidation'),
-            errorPasswordValidation: BuiltValueNullFieldError.checkNotNull(
-                errorPasswordValidation,
-                r'SignInState',
-                'errorPasswordValidation'),
-            errorSignIn: BuiltValueNullFieldError.checkNotNull(
-                errorSignIn, r'SignInState', 'errorSignIn'),
-            isSecureText: BuiltValueNullFieldError.checkNotNull(
-                isSecureText, r'SignInState', 'isSecureText'),
-            isSigningIn: BuiltValueNullFieldError.checkNotNull(
-                isSigningIn, r'SignInState', 'isSigningIn'),
-            userSignedIn: BuiltValueNullFieldError.checkNotNull(
-                userSignedIn, r'SignInState', 'userSignedIn'),
-            signInParams: BuiltValueNullFieldError.checkNotNull(
-                signInParams, r'SignInState', 'signInParams'));
+        _$SignInState._(
+          errorUserNameValidation: BuiltValueNullFieldError.checkNotNull(
+              errorUserNameValidation,
+              r'SignInState',
+              'errorUserNameValidation'),
+          errorPasswordValidation: BuiltValueNullFieldError.checkNotNull(
+              errorPasswordValidation,
+              r'SignInState',
+              'errorPasswordValidation'),
+          errorSignIn: BuiltValueNullFieldError.checkNotNull(
+              errorSignIn, r'SignInState', 'errorSignIn'),
+          isSecureText: BuiltValueNullFieldError.checkNotNull(
+              isSecureText, r'SignInState', 'isSecureText'),
+          isSigningIn: BuiltValueNullFieldError.checkNotNull(
+              isSigningIn, r'SignInState', 'isSigningIn'),
+          userSignedIn: BuiltValueNullFieldError.checkNotNull(
+              userSignedIn, r'SignInState', 'userSignedIn'),
+          signInParams: BuiltValueNullFieldError.checkNotNull(
+              signInParams, r'SignInState', 'signInParams'),
+        );
     replace(_$result);
     return _$result;
   }

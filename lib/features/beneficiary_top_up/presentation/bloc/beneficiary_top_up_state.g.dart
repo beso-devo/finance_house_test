@@ -26,7 +26,7 @@ class _$BeneficiaryTopUpState extends BeneficiaryTopUpState {
 
   factory _$BeneficiaryTopUpState(
           [void Function(BeneficiaryTopUpStateBuilder)? updates]) =>
-      (new BeneficiaryTopUpStateBuilder()..update(updates))._build();
+      (BeneficiaryTopUpStateBuilder()..update(updates))._build();
 
   _$BeneficiaryTopUpState._(
       {required this.errorAmountValidation,
@@ -37,21 +37,7 @@ class _$BeneficiaryTopUpState extends BeneficiaryTopUpState {
       required this.errorToppingUp,
       required this.amountTransferred,
       this.failure})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(errorAmountValidation,
-        r'BeneficiaryTopUpState', 'errorAmountValidation');
-    BuiltValueNullFieldError.checkNotNull(
-        amount, r'BeneficiaryTopUpState', 'amount');
-    BuiltValueNullFieldError.checkNotNull(
-        fixedAmounts, r'BeneficiaryTopUpState', 'fixedAmounts');
-    BuiltValueNullFieldError.checkNotNull(
-        isToppingUp, r'BeneficiaryTopUpState', 'isToppingUp');
-    BuiltValueNullFieldError.checkNotNull(
-        errorToppingUp, r'BeneficiaryTopUpState', 'errorToppingUp');
-    BuiltValueNullFieldError.checkNotNull(
-        amountTransferred, r'BeneficiaryTopUpState', 'amountTransferred');
-  }
-
+      : super._();
   @override
   BeneficiaryTopUpState rebuild(
           void Function(BeneficiaryTopUpStateBuilder) updates) =>
@@ -59,7 +45,7 @@ class _$BeneficiaryTopUpState extends BeneficiaryTopUpState {
 
   @override
   BeneficiaryTopUpStateBuilder toBuilder() =>
-      new BeneficiaryTopUpStateBuilder()..replace(this);
+      BeneficiaryTopUpStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -166,7 +152,6 @@ class BeneficiaryTopUpStateBuilder
 
   @override
   void replace(BeneficiaryTopUpState other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$BeneficiaryTopUpState;
   }
 
@@ -180,25 +165,24 @@ class BeneficiaryTopUpStateBuilder
 
   _$BeneficiaryTopUpState _build() {
     final _$result = _$v ??
-        new _$BeneficiaryTopUpState._(
-            errorAmountValidation: BuiltValueNullFieldError.checkNotNull(
-                errorAmountValidation,
-                r'BeneficiaryTopUpState',
-                'errorAmountValidation'),
-            newTopUpEntity: newTopUpEntity,
-            amount: BuiltValueNullFieldError.checkNotNull(
-                amount, r'BeneficiaryTopUpState', 'amount'),
-            fixedAmounts: BuiltValueNullFieldError.checkNotNull(
-                fixedAmounts, r'BeneficiaryTopUpState', 'fixedAmounts'),
-            isToppingUp: BuiltValueNullFieldError.checkNotNull(
-                isToppingUp, r'BeneficiaryTopUpState', 'isToppingUp'),
-            errorToppingUp: BuiltValueNullFieldError.checkNotNull(
-                errorToppingUp, r'BeneficiaryTopUpState', 'errorToppingUp'),
-            amountTransferred: BuiltValueNullFieldError.checkNotNull(
-                amountTransferred,
-                r'BeneficiaryTopUpState',
-                'amountTransferred'),
-            failure: failure);
+        _$BeneficiaryTopUpState._(
+          errorAmountValidation: BuiltValueNullFieldError.checkNotNull(
+              errorAmountValidation,
+              r'BeneficiaryTopUpState',
+              'errorAmountValidation'),
+          newTopUpEntity: newTopUpEntity,
+          amount: BuiltValueNullFieldError.checkNotNull(
+              amount, r'BeneficiaryTopUpState', 'amount'),
+          fixedAmounts: BuiltValueNullFieldError.checkNotNull(
+              fixedAmounts, r'BeneficiaryTopUpState', 'fixedAmounts'),
+          isToppingUp: BuiltValueNullFieldError.checkNotNull(
+              isToppingUp, r'BeneficiaryTopUpState', 'isToppingUp'),
+          errorToppingUp: BuiltValueNullFieldError.checkNotNull(
+              errorToppingUp, r'BeneficiaryTopUpState', 'errorToppingUp'),
+          amountTransferred: BuiltValueNullFieldError.checkNotNull(
+              amountTransferred, r'BeneficiaryTopUpState', 'amountTransferred'),
+          failure: failure,
+        );
     replace(_$result);
     return _$result;
   }

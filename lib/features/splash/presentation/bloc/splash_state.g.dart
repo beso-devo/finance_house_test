@@ -11,19 +11,15 @@ class _$SplashState extends SplashState {
   final int userStatus;
 
   factory _$SplashState([void Function(SplashStateBuilder)? updates]) =>
-      (new SplashStateBuilder()..update(updates))._build();
+      (SplashStateBuilder()..update(updates))._build();
 
-  _$SplashState._({required this.userStatus}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        userStatus, r'SplashState', 'userStatus');
-  }
-
+  _$SplashState._({required this.userStatus}) : super._();
   @override
   SplashState rebuild(void Function(SplashStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  SplashStateBuilder toBuilder() => new SplashStateBuilder()..replace(this);
+  SplashStateBuilder toBuilder() => SplashStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -67,7 +63,6 @@ class SplashStateBuilder implements Builder<SplashState, SplashStateBuilder> {
 
   @override
   void replace(SplashState other) {
-    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$SplashState;
   }
 
@@ -81,9 +76,10 @@ class SplashStateBuilder implements Builder<SplashState, SplashStateBuilder> {
 
   _$SplashState _build() {
     final _$result = _$v ??
-        new _$SplashState._(
-            userStatus: BuiltValueNullFieldError.checkNotNull(
-                userStatus, r'SplashState', 'userStatus'));
+        _$SplashState._(
+          userStatus: BuiltValueNullFieldError.checkNotNull(
+              userStatus, r'SplashState', 'userStatus'),
+        );
     replace(_$result);
     return _$result;
   }

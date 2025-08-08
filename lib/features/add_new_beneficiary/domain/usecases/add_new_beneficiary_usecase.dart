@@ -8,7 +8,7 @@ import '../repository/add_new_beneficiary_repository.dart';
 @LazySingleton()
 class AddNewBeneficiaryUseCase
     extends UseCase<BeneficiaryEntity, SubmitNewBeneficiaryParams> {
-  final AddNewBeneficiaryRepository addNewBeneficiaryRepository;
+  final BeneficiaryRepository addNewBeneficiaryRepository;
 
   AddNewBeneficiaryUseCase(this.addNewBeneficiaryRepository);
 
