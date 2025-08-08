@@ -1,8 +1,5 @@
-library base_list_response_model;
-
 import 'package:json_annotation/json_annotation.dart';
-
-import '../../domain/entity/beneficiary_entity.dart';
+import '../../../features/add_new_beneficiary/data/model/beneficiary_model.dart';
 part 'base_list_response_model.g.dart';
 
 @JsonSerializable()
@@ -31,8 +28,8 @@ class _Converter<T> implements JsonConverter<T, Object> {
     if (json is Map<String, dynamic>) {
       print('T list is ' + T.toString());
       print('T keys is ${json.keys}');
-      if(T.toString() == BeneficiaryEntity.className){
-        return BeneficiaryEntity.fromJson(json) as T;
+      if(T.toString() == BeneficiaryModel.className){
+        return BeneficiaryModel.fromJson(json) as T;
       }
     }
     return json as T;

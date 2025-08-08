@@ -7,7 +7,7 @@ import '../../../../core/domain/entity/user_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../../domain/repository/sign_up_repository.dart';
 import '../../domain/usecases/continue_as_guest_usecase.dart';
-import '../../domain/usecases/sign_up_usecase.dart';
+import '../../domain/usecases/params/sign_up_params.dart';
 import '../datasource/sign_up_local_datasource.dart';
 import '../datasource/sign_up_remote_datasource.dart';
 

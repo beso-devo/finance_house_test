@@ -39,9 +39,9 @@ import '../../features/main_page/data/datasource/main_page_local_datasource.dart
     as _i332;
 import '../../features/main_page/data/datasource/main_page_remote_datasource.dart'
     as _i27;
-import '../../features/main_page/data/repository/dealer_main_repository_impl.dart'
+import '../../features/main_page/data/repository/main_page_repository_impl.dart'
     as _i987;
-import '../../features/main_page/domain/repository/dealer_main_repository.dart'
+import '../../features/main_page/domain/repository/main_page_repository.dart'
     as _i10;
 import '../../features/main_page/domain/usecases/get_beneficiaries_usecase.dart'
     as _i336;
@@ -177,6 +177,8 @@ Future<_i174.GetIt> $initGetIt(
             networkInfo: gh<_i932.NetworkInfo>(),
             baseLocalDataSource: gh<_i660.BaseLocalDataSource>(),
           ));
+  gh.lazySingleton<_i532.BeneficiaryTopUpUseCase>(() =>
+      _i532.BeneficiaryTopUpUseCase(gh<_i552.BeneficiaryTopUpRepository>()));
   gh.lazySingleton<_i692.ContinueAsGuestUseCase>(
       () => _i692.ContinueAsGuestUseCase(gh<_i578.SignUpRepository>()));
   gh.lazySingleton<_i18.SignUpUseCase>(
@@ -187,9 +189,10 @@ Future<_i174.GetIt> $initGetIt(
       () => _i518.SignInUseCase(gh<_i841.SignInRepository>()));
   gh.lazySingleton<_i336.GetBeneficiariesUseCase>(
       () => _i336.GetBeneficiariesUseCase(gh<_i10.MainPageRepository>()));
-  gh.factory<_i950.MainPageBloc>(() => _i950.MainPageBloc(
-        gh<_i336.GetBeneficiariesUseCase>(),
-        gh<_i1067.GetUserInfoUseCase>(),
+  gh.factory<_i640.SignInBloc>(() => _i640.SignInBloc(
+        signInUseCase: gh<_i518.SignInUseCase>(),
+        saveUserInfoUseCase: gh<_i542.SaveUserInfoUseCase>(),
+        inputValidators: gh<_i941.InputValidators>(),
       ));
   gh.lazySingleton<_i445.BeneficiaryRepository>(
       () => _i818.BeneficiaryRepositoryImpl(
@@ -198,27 +201,24 @@ Future<_i174.GetIt> $initGetIt(
             networkInfo: gh<_i932.NetworkInfo>(),
             baseLocalDataSource: gh<_i660.BaseLocalDataSource>(),
           ));
-  gh.factory<_i442.SplashBloc>(() =>
-      _i442.SplashBloc(checkUserIsLoggedIn: gh<_i848.CheckUserIsLoggedIn>()));
+  gh.factory<_i442.SplashCubit>(() =>
+      _i442.SplashCubit(checkUserIsLoggedIn: gh<_i848.CheckUserIsLoggedIn>()));
   gh.factory<_i148.SignUpBloc>(() => _i148.SignUpBloc(
         signUpUseCase: gh<_i18.SignUpUseCase>(),
         saveUserInfoUseCase: gh<_i542.SaveUserInfoUseCase>(),
         continueAsGuestUseCase: gh<_i692.ContinueAsGuestUseCase>(),
         inputValidators: gh<_i941.InputValidators>(),
       ));
-  gh.factory<_i640.SignInBloc>(() => _i640.SignInBloc(
-        gh<_i518.SignInUseCase>(),
-        gh<_i542.SaveUserInfoUseCase>(),
-        gh<_i941.InputValidators>(),
-      ));
-  gh.lazySingleton<_i532.BeneficiaryTopUpUseCase>(() =>
-      _i532.BeneficiaryTopUpUseCase(gh<_i552.BeneficiaryTopUpRepository>()));
-  gh.lazySingleton<_i791.AddNewBeneficiaryUseCase>(
-      () => _i791.AddNewBeneficiaryUseCase(gh<_i445.BeneficiaryRepository>()));
   gh.factory<_i849.BeneficiaryTopUpBloc>(() => _i849.BeneficiaryTopUpBloc(
         beneficiaryTopUpUseCase: gh<_i532.BeneficiaryTopUpUseCase>(),
         inputValidators: gh<_i941.InputValidators>(),
       ));
+  gh.factory<_i950.MainPageBloc>(() => _i950.MainPageBloc(
+        getBeneficiariesUseCase: gh<_i336.GetBeneficiariesUseCase>(),
+        getUserInfoUseCase: gh<_i1067.GetUserInfoUseCase>(),
+      ));
+  gh.lazySingleton<_i791.AddNewBeneficiaryUseCase>(
+      () => _i791.AddNewBeneficiaryUseCase(gh<_i445.BeneficiaryRepository>()));
   gh.factory<_i159.AddNewBeneficiaryBloc>(() => _i159.AddNewBeneficiaryBloc(
         addNewBeneficiaryUseCase: gh<_i791.AddNewBeneficiaryUseCase>(),
         inputValidators: gh<_i941.InputValidators>(),

@@ -6,7 +6,6 @@ import '../../../../core/util/generate_screen.dart';
 import '../../../../core/util/input_text_field.dart';
 import '../../../../core/util/widgets/submit_button_widget.dart';
 import '../bloc/sign_up_bloc.dart';
-import '../bloc/sign_up_state.dart';
 import '../widgets/header_widget.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -28,95 +27,87 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocConsumer(
       bloc: _bloc,
       listener: (BuildContext context, SignUpState state) {
         if (state.userSignedUp) {
           Navigator.pushNamedAndRemoveUntil(
-              context, GeneralScreens.MAIN_PAGE, (route) => false);
+            context,
+            GeneralScreens.MAIN_PAGE,
+            (route) => false,
+          );
         }
       },
-      child: BlocBuilder(
-        bloc: _bloc,
-        builder: (context, SignUpState state) {
-          return Scaffold(
-              key: scaffoldState,
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(0.0),
-                  child: AppBar(
-                    backgroundColor: Color(0xffF8F7F7),
-                    elevation: 0.0,
-                  )),
-              body: OrientationBuilder(
-                builder: (BuildContext context, Orientation orientation) {
-                  if (MediaQuery.of(context).orientation ==
-                      Orientation.portrait) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          child: Column(children: [
-                            HeaderSignUpWidget(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            formSignUp(state),
-                            createAnAccount(),
-                            continueAsGuestWidget()
-                          ]),
-                        ),
+      builder: (BuildContext context, SignUpState state) {
+        return Scaffold(
+          key: scaffoldState,
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(0.0),
+            child: AppBar(backgroundColor: Color(0xffF8F7F7), elevation: 0.0),
+          ),
+          body: OrientationBuilder(
+            builder: (BuildContext context, Orientation orientation) {
+              if (MediaQuery.of(context).orientation == Orientation.portrait) {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
                       ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Column(
                         children: [
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  HeaderSignUpWidget(),
-                                  createAnAccount()
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 12.0,
-                                  ),
-                                  formSignUp(state),
-                                  SizedBox(
-                                    height: 8.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          HeaderSignUpWidget(),
+                          SizedBox(height: 20.0),
+                          formSignUp(state),
+                          createAnAccount(),
+                          continueAsGuestWidget(),
                         ],
                       ),
-                    );
-                  }
-                },
-              ));
-        },
-      ),
+                    ),
+                  ),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
+                        height: MediaQuery.of(context).size.height,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [HeaderSignUpWidget(), createAnAccount()],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
+                        height: MediaQuery.of(context).size.height,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 12.0),
+                              formSignUp(state),
+                              SizedBox(height: 8.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -124,89 +115,84 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       children: [
         InputTextField(
-            title: 'ss',
-            hintText: "Email",
-            inputType: TextInputType.name,
-            onSubmit: (val) {},
-            onChanged: _bloc.onEmailChanged,
-            controller: emailController,
-            showError: state.errorEmailValidation,
-            errorText: "Invalid input!",
-            prefixIcon: Icon(
-              Icons.email,
-              size: 20.0,
-            )),
-        SizedBox(
-          height: 12.0,
+          title: 'ss',
+          hintText: "Email",
+          inputType: TextInputType.name,
+          onSubmit: (val) {},
+          onChanged: (val) => _bloc.add(SignUpEvent.emailChanging(val)),
+          controller: emailController,
+          showError: state.errorEmailValidation,
+          errorText: "Invalid input!",
+          prefixIcon: Icon(Icons.email, size: 20.0),
         ),
+        SizedBox(height: 12.0),
         InputTextField(
-            title: 'ss',
-            hintText: "Password",
-            inputType: TextInputType.name,
-            onSubmit: (val) {},
-            onChanged: _bloc.onPasswordChanged,
-            controller: passwordController,
-            showError: state.errorPasswordValidation,
-            errorText: "Invalid input!",
-            obscureText: state.isPasswordObscured,
-            suffixIcon: GestureDetector(
-              onTap: _bloc.onPasswordObscureChanged,
-              child: Icon(
-                state.isPasswordObscured
-                    ? Icons.remove_red_eye
-                    : Icons.panorama_fish_eye,
-                color: DARK_OFF_FONT,
-              ),
+          title: 'ss',
+          hintText: "Password",
+          inputType: TextInputType.name,
+          onSubmit: (val) {},
+          onChanged: (val) => _bloc.add(SignUpEvent.passwordChanging(val)),
+          controller: passwordController,
+          showError: state.errorPasswordValidation,
+          errorText: "Invalid input!",
+          obscureText: state.isPasswordObscured,
+          suffixIcon: GestureDetector(
+            onTap:
+                () => _bloc.add(
+                  SignUpEvent.passwordObscureChanging(
+                    !state.isPasswordObscured,
+                  ),
+                ),
+            child: Icon(
+              state.isPasswordObscured
+                  ? Icons.remove_red_eye
+                  : Icons.panorama_fish_eye,
+              color: DARK_OFF_FONT,
             ),
-            prefixIcon: Icon(
-              Icons.lock,
-              size: 20.0,
-            )),
-        SizedBox(
-          height: 12.0,
+          ),
+          prefixIcon: Icon(Icons.lock, size: 20.0),
         ),
+        SizedBox(height: 12.0),
         InputTextField(
-            title: 'ss',
-            hintText: "Confirm password",
-            inputType: TextInputType.name,
-            onSubmit: (val) {},
-            onChanged: _bloc.onConfirmPasswordChanged,
-            controller: confirmPasswordController,
-            showError: state.errorConfirmPasswordValidation,
-            errorText: "Invalid input!",
-            obscureText: state.isConfirmPasswordObscured,
-            suffixIcon: GestureDetector(
-              onTap: _bloc.onConfirmPasswordObscureChanged,
-              child: Icon(
-                state.isConfirmPasswordObscured
-                    ? Icons.remove_red_eye
-                    : Icons.panorama_fish_eye,
-                color: DARK_OFF_FONT,
-              ),
+          title: 'ss',
+          hintText: "Confirm password",
+          inputType: TextInputType.name,
+          onSubmit: (val) {},
+          onChanged:
+              (val) => _bloc.add(SignUpEvent.confirmPasswordChanging(val)),
+          controller: confirmPasswordController,
+          showError: state.errorConfirmPasswordValidation,
+          errorText: "Invalid input!",
+          obscureText: state.isConfirmPasswordObscured,
+          suffixIcon: GestureDetector(
+            onTap:
+                () => _bloc.add(
+                  SignUpEvent.passwordObscureChanging(
+                    !state.isPasswordObscured,
+                  ),
+                ),
+            child: Icon(
+              state.isConfirmPasswordObscured
+                  ? Icons.remove_red_eye
+                  : Icons.panorama_fish_eye,
+              color: DARK_OFF_FONT,
             ),
-            prefixIcon: Icon(
-              Icons.lock,
-              size: 20.0,
-            )),
-        SizedBox(
-          height: 12.0,
+          ),
+          prefixIcon: Icon(Icons.lock, size: 20.0),
         ),
+        SizedBox(height: 12.0),
         InputTextField(
-            title: 'ss',
-            hintText: "Phone number",
-            inputType: TextInputType.number,
-            onSubmit: (val) {},
-            onChanged: _bloc.onPhoneNumberChanged,
-            controller: phoneNumberController,
-            showError: state.errorPhoneNumberValidation,
-            errorText: "Invalid input!",
-            prefixIcon: Icon(
-              Icons.phone,
-              size: 20.0,
-            )),
-        SizedBox(
-          height: 12.0,
+          title: 'ss',
+          hintText: "Phone number",
+          inputType: TextInputType.number,
+          onSubmit: (val) {},
+          onChanged: (val) => _bloc.add(SignUpEvent.phoneNumberChanging(val)),
+          controller: phoneNumberController,
+          showError: state.errorPhoneNumberValidation,
+          errorText: "Invalid input!",
+          prefixIcon: Icon(Icons.phone, size: 20.0),
         ),
+        SizedBox(height: 12.0),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -215,7 +201,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: SubmitButtonWidget(
               color: MAIN1,
               title: "Sign Up",
-              onTap: _bloc.onSignUpSubmit,
+              onTap: () => _bloc.add(SignUpEvent.signingUp()),
               isLoading: state.isSigningUp,
             ),
           ),
@@ -244,7 +230,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 "Sign In",
                 style: TextStyle(color: MAIN1, fontSize: 16.0),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -258,10 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
         onPressed: () {
           Navigator.pushNamed(context, GeneralScreens.CONTINUE_AS_GUEST);
         },
-        child: Text(
-          "Continue as guest?",
-          style: TextStyle(color: Colors.grey),
-        ),
+        child: Text("Continue as guest?", style: TextStyle(color: Colors.grey)),
       ),
     );
   }

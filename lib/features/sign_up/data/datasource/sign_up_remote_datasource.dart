@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:finance_house_test/core/data/models/user_model.dart';
 import '../../../../../core/network/models/base_response_model.dart';
 import '../../../../core/data/models/base_remote_datasource.dart';
 import '../../../../core/domain/entity/user_entity.dart';
 import '../../domain/usecases/continue_as_guest_usecase.dart';
-import '../../domain/usecases/sign_up_usecase.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../domain/usecases/params/sign_up_params.dart';
 
 abstract class SignUpRemoteDataSource extends BaseRemoteDataSource {
   Future<BaseResponseModel<UserEntity>> signUp(SignUpParams params);
@@ -20,7 +22,7 @@ class SignUpRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
   SignUpRemoteDataSourceImpl({required Dio dio}) : super(dio: dio);
 
   @override
-  Future<BaseResponseModel<UserEntity>> signUp(SignUpParams params) async {
+  Future<BaseResponseModel<UserModel>> signUp(SignUpParams params) async {
     /// Here we can do the request from the backend and for sure we should make the
     /// conditions and implement the code to handle the errors and display it using
     /// `FlushBarMixin` widget or something like it...
@@ -29,10 +31,10 @@ class SignUpRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
     //     data: jsonEncode(params.toMap()));
     //
     // return BaseResponseModel(
-    //     data: UserEntity.fromJson(json.decode(result.data)['result']));
+    //     data: UserModel.fromJson(json.decode(result.data)['result']));
 
     return BaseResponseModel(
-      data: UserEntity(
+      data: UserModel(
         id: 1,
         isVerified: true,
         balance: 5000,
@@ -42,11 +44,11 @@ class SignUpRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
   }
 
   @override
-  Future<BaseResponseModel<UserEntity>> continueAsGuest(
+  Future<BaseResponseModel<UserModel>> continueAsGuest(
     ContinueAsGuestParams params,
   ) async {
     return BaseResponseModel(
-      data: UserEntity(
+      data: UserModel(
         id: 1,
         isVerified: false,
         balance: 4000,

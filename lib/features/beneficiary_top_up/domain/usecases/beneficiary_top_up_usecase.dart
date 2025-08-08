@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
-import 'package:finance_house_test/core/domain/entity/top_up_entity.dart';
-import 'package:finance_house_test/core/domain/entity/user_entity.dart';
+import 'package:finance_house_test/features/beneficiary_top_up/domain/entity/top_up_entity.dart';
 import 'package:finance_house_test/core/util/constants.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/domain/usecases/usecase.dart';
 import '../../../../core/error/failures.dart';
+import 'params/beneficiary_top_up_params.dart';
 import '../repository/beneficiary_top_up_repository.dart';
 
 @LazySingleton()
@@ -79,11 +78,4 @@ class BeneficiaryTopUpUseCase
       },
     );
   }
-}
-
-class BeneficiaryTopUpParams {
-  num amount = 0.0;
-  BeneficiaryEntity beneficiaryEntity;
-
-  BeneficiaryTopUpParams(this.amount, this.beneficiaryEntity);
 }

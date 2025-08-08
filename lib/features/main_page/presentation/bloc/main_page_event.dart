@@ -1,20 +1,9 @@
-import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
-import 'package:finance_house_test/core/domain/entity/top_up_entity.dart';
+part of 'main_page_bloc.dart';
 
-abstract class MainPageEvent {}
-
-class InitializePage extends MainPageEvent {}
-
-class AddBeneficiary extends MainPageEvent {
-  final BeneficiaryEntity beneficiaryEntity;
-
-  AddBeneficiary(this.beneficiaryEntity);
-}
-
-class ClearErrors extends MainPageEvent {}
-
-class TopUpAdded extends MainPageEvent {
-  final TopUpEntity topUpEntity;
-
-  TopUpAdded(this.topUpEntity);
+@freezed
+class MainPageEvent with _$MainPageEvent {
+  const factory MainPageEvent.initializePage() = _InitializePage;
+  const factory MainPageEvent.addBeneficiary(BeneficiaryEntity beneficiaryEntity) = _AddBeneficiary;
+  const factory MainPageEvent.clearErrors() = _ClearErrors;
+  const factory MainPageEvent.topUpAdded(TopUpEntity topUpEntity) = _TopUpAdded;
 }

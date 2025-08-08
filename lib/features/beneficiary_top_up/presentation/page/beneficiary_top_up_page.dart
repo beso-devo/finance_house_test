@@ -1,6 +1,5 @@
-import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
+import 'package:finance_house_test/features/add_new_beneficiary/domain/entity/beneficiary_entity.dart';
 import 'package:finance_house_test/core/error/failures.dart';
-import 'package:finance_house_test/core/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -10,7 +9,6 @@ import '../../../../core/util/input_text_field.dart';
 import '../../../../core/util/mixin/flush_bar_mixin.dart';
 import '../../../../core/util/widgets/submit_button_widget.dart';
 import '../bloc/beneficiary_top_up_bloc.dart';
-import '../bloc/beneficiary_top_up_state.dart';
 
 class BeneficiaryTopUpPage extends StatefulWidget {
   final BeneficiaryEntity beneficiaryEntity;
@@ -29,7 +27,7 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocConsumer(
       bloc: _bloc,
       listener: (BuildContext context, BeneficiaryTopUpState state) {
         if (state.amountTransferred) {
@@ -39,121 +37,123 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
           exceptionFlushBar(
             title: (state.failure as ServerFailure).title ?? "Error!",
             context: context,
-            message: (state.failure as ServerFailure).message ?? "Error; Undefined Message!",
+            message:
+                (state.failure as ServerFailure).message ??
+                "Error; Undefined Message!",
             duration: Duration(milliseconds: 1750),
             onChangeStatus: (status) {},
             onHidden: () {},
           );
-          _bloc.onClearErrors();
+          _bloc.add(BeneficiaryTopUpEvent.clearErrors());
         }
       },
-      child: BlocBuilder(
-        bloc: _bloc,
-        builder: (context, BeneficiaryTopUpState state) {
-          return Scaffold(
-            key: scaffoldState,
-            backgroundColor: Colors.white,
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(0.0),
-              child: AppBar(backgroundColor: Color(0xffF8F7F7), elevation: 0.0),
-            ),
-            body: OrientationBuilder(
-              builder: (BuildContext context, Orientation orientation) {
-                if (MediaQuery.of(context).orientation ==
-                    Orientation.portrait) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics(),
-                        ),
-                        child: Column(
-                          children: [
-                            headerPage(),
-                            SizedBox(height: 35),
-                            formAddBeneficiary(state),
-                            SizedBox(height: 12.0),
-                            fixedAmountsWidget(state),
-                            SizedBox(height: 12.0),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                height: 65,
-                                color: WHITE,
-                                child: SubmitButtonWidget(
-                                  color: MAIN1,
-                                  title: "Top Up",
-                                  onTap:
-                                      () => _bloc.onTopUpSubmit(
+      builder: (BuildContext context, BeneficiaryTopUpState state) {
+        return Scaffold(
+          key: scaffoldState,
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(0.0),
+            child: AppBar(backgroundColor: Color(0xffF8F7F7), elevation: 0.0),
+          ),
+          body: OrientationBuilder(
+            builder: (BuildContext context, Orientation orientation) {
+              if (MediaQuery.of(context).orientation == Orientation.portrait) {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
+                      ),
+                      child: Column(
+                        children: [
+                          headerPage(),
+                          SizedBox(height: 35),
+                          formAddBeneficiary(state),
+                          SizedBox(height: 12.0),
+                          fixedAmountsWidget(state),
+                          SizedBox(height: 12.0),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              height: 65,
+                              color: WHITE,
+                              child: SubmitButtonWidget(
+                                color: MAIN1,
+                                title: "Top Up",
+                                onTap:
+                                    () => _bloc.add(
+                                      BeneficiaryTopUpEvent.topUpSubmit(
                                         widget.beneficiaryEntity,
                                       ),
-                                  isLoading: false,
-                                ),
+                                    ),
+                                isLoading: false,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: (MediaQuery.of(context).size.width / 2) - 10,
-                          height: MediaQuery.of(context).size.height,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(children: [headerPage()]),
-                          ),
+                  ),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
+                        height: MediaQuery.of(context).size.height,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(children: [headerPage()]),
                         ),
-                        Container(
-                          width: (MediaQuery.of(context).size.width / 2) - 10,
-                          height: MediaQuery.of(context).size.height,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                SizedBox(height: 12.0),
-                                formAddBeneficiary(state),
-                                fixedAmountsWidget(state),
-                                SizedBox(height: 12.0),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                    height: 65,
-                                    color: WHITE,
-                                    child: SubmitButtonWidget(
-                                      color: MAIN1,
-                                      title: "Top Up",
-                                      onTap:
-                                          () => _bloc.onTopUpSubmit(
+                      ),
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
+                        height: MediaQuery.of(context).size.height,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 12.0),
+                              formAddBeneficiary(state),
+                              fixedAmountsWidget(state),
+                              SizedBox(height: 12.0),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  height: 65,
+                                  color: WHITE,
+                                  child: SubmitButtonWidget(
+                                    color: MAIN1,
+                                    title: "Top Up",
+                                    onTap:
+                                        () => _bloc.add(
+                                          BeneficiaryTopUpEvent.topUpSubmit(
                                             widget.beneficiaryEntity,
                                           ),
-                                      isLoading: false,
-                                    ),
+                                        ),
+                                    isLoading: false,
                                   ),
                                 ),
-                                SizedBox(height: 8.0),
-                              ],
-                            ),
+                              ),
+                              SizedBox(height: 8.0),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          );
-        },
-      ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -165,7 +165,11 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
           padding: const EdgeInsets.only(left: 4.0, right: 4.0, top: 4.0),
           child: GestureDetector(
             onTap: () {
-              _bloc.onAmountChanged(state.fixedAmounts[index].toString());
+              _bloc.add(
+                BeneficiaryTopUpEvent.amountChanged(
+                  state.fixedAmounts[index].toString(),
+                ),
+              );
               amountController.text = state.fixedAmounts[index].toString();
             },
             child: Container(
@@ -213,7 +217,8 @@ class _BeneficiaryTopUpPageState extends State<BeneficiaryTopUpPage>
           hintText: "Amount: 250...",
           inputType: TextInputType.number,
           onSubmit: (val) {},
-          onChanged: _bloc.onAmountChanged,
+          onChanged:
+              (val) => _bloc.add(BeneficiaryTopUpEvent.amountChanged(val)),
           controller: amountController,
           showError: state.errorAmountValidation,
           errorText: "Invalid input!",

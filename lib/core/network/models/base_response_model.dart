@@ -3,6 +3,7 @@ library base_response_model;
 import 'package:json_annotation/json_annotation.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/util/constants.dart';
+import '../../data/models/user_model.dart';
 import '../../domain/entity/user_entity.dart';
 
 part 'base_response_model.g.dart';
@@ -49,8 +50,8 @@ T _dataFromJson<T>(dynamic result) {
   print(result);
   try {
     if (result is Map<String, dynamic>) {
-      if (name == UserEntity.className) {
-        return UserEntity.fromJson(result) as T;
+      if (name == UserModel.className) {
+        return UserModel.fromJson(result) as T;
       }
     }
     if (name == 'String') {

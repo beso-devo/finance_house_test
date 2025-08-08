@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:finance_house_test/core/domain/entity/user_entity.dart';
+import 'package:finance_house_test/core/data/models/user_model.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../core/data/models/base_remote_datasource.dart';
 import '../../../../../core/network/models/base_response_model.dart';
 
 abstract class SignInRemoteDataSource extends BaseRemoteDataSource {
-  Future<BaseResponseModel<UserEntity>> login(String email, String password);
+  Future<BaseResponseModel<UserModel>> login(String email, String password);
 }
 
 @LazySingleton(as: SignInRemoteDataSource)
@@ -15,7 +15,7 @@ class SignInRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
   SignInRemoteDataSourceImpl({required Dio dio}) : super(dio: dio);
 
   @override
-  Future<BaseResponseModel<UserEntity>> login(
+  Future<BaseResponseModel<UserModel>> login(
     String email,
     String password,
   ) async {
@@ -28,10 +28,10 @@ class SignInRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
       //     data: jsonEncode({"username": email.toLowerCase().trim(), "password": password}));
 
       // return BaseResponseModel(
-      //     data: UserEntity.fromJson(json.decode(result.data)['result']));
+      //     data: UserModel.fromJson(json.decode(result.data)['result']));
 
       return BaseResponseModel(
-        data: UserEntity(
+        data: UserModel(
           id: 1,
           isVerified: true,
           balance: 5000,

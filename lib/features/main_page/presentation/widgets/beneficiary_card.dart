@@ -1,5 +1,5 @@
-import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
-import 'package:finance_house_test/core/domain/entity/top_up_entity.dart';
+import 'package:finance_house_test/features/add_new_beneficiary/domain/entity/beneficiary_entity.dart';
+import 'package:finance_house_test/features/beneficiary_top_up/domain/entity/top_up_entity.dart';
 import 'package:finance_house_test/core/util/colors.dart';
 import 'package:finance_house_test/core/util/extensions/extension_on_context.dart';
 import 'package:finance_house_test/core/util/generate_screen.dart';

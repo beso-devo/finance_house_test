@@ -1,33 +1,33 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-
 import '../../../../core/domain/usecases/usecase.dart';
 import '../../domain/usecases/check_user_logged_id.dart';
-import 'splash_event.dart';
-import 'splash_state.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'splash_bloc.freezed.dart';
+
+part 'splash_event.dart';
+
+part 'splash_state.dart';
 
 @Injectable()
-class SplashBloc extends Bloc<SplashEvent, SplashState> {
+class SplashCubit extends Bloc<SplashEvent, SplashState> {
   final CheckUserIsLoggedIn checkUserIsLoggedIn;
 
-  SplashBloc({required this.checkUserIsLoggedIn})
-      : super(SplashState.initial());
-
-  void onInitializeApp() {
-    add(InitializeApp());
+  SplashCubit({required this.checkUserIsLoggedIn})
+    : super(SplashState.initial()) {
+    on<SplashEvent>((event, emit) async {
+      await event.map(initializeApp: (e) async => _checkUserStatus(e, emit));
+    });
   }
 
-  @override
-  Stream<SplashState> mapEventToState(SplashEvent event) async* {
-    if (event is InitializeApp) {
-      yield* mapToCheckUserStatus();
-    }
-  }
-
-  Stream<SplashState> mapToCheckUserStatus() async* {
+  Future<void> _checkUserStatus(
+    _InitializeApp event,
+    Emitter<SplashState> emit,
+  ) async {
     final result = await checkUserIsLoggedIn(NoParams());
-    yield* result.fold((l) async* {}, (r) async* {
-      yield state.rebuild((b) => b..userStatus = r);
+    result.fold((failure) {}, (userStatus) {
+      emit(state.copyWith(userStatus: userStatus));
     });
   }
 }

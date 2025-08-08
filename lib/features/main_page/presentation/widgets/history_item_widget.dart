@@ -1,4 +1,4 @@
-import 'package:finance_house_test/core/domain/entity/top_up_entity.dart';
+import 'package:finance_house_test/features/beneficiary_top_up/domain/entity/top_up_entity.dart';
 import 'package:finance_house_test/core/util/extensions/extension_on_context.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -41,7 +41,7 @@ class HistoryItemWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        topUpEntity.beneficiaryEntity.nickName,
+                        topUpEntity.beneficiaryModel.nickName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -52,7 +52,7 @@ class HistoryItemWidget extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      Text(topUpEntity.beneficiaryEntity.phoneNumber,
+                      Text(topUpEntity.beneficiaryModel.phoneNumber,
                           style: TextStyle(
                               fontSize: 9.5.sp,
                               color: TEXT_FIELD_HINT_COLOR,

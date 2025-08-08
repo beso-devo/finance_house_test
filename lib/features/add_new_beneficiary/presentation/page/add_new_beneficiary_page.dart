@@ -4,12 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/util/colors.dart';
-import '../../../../core/util/generate_screen.dart';
 import '../../../../core/util/input_text_field.dart';
 import '../../../../core/util/mixin/flush_bar_mixin.dart';
 import '../../../../core/util/widgets/submit_button_widget.dart';
 import '../bloc/add_new_beneficiary_bloc.dart';
-import '../bloc/add_new_beneficiary_state.dart';
 
 class AddBeneficiaryPage extends StatefulWidget {
   @override
@@ -25,102 +23,94 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocConsumer(
       bloc: _bloc,
       listener: (BuildContext context, AddNewBeneficiaryState state) {
         if (state.beneficiaryAdded) {
           Navigator.pop(context, {"beneficiary": state.newBeneficiary});
         }
-        if(state.failure != null && (state.failure is ServerFailure)){
+        if (state.failure != null && (state.failure is ServerFailure)) {
           exceptionFlushBar(
-              title: (state.failure as ServerFailure).title ?? "Error!",
-              context: context,
-              message: (state.failure as ServerFailure).message ?? "Error; Undefined Message!",
-              duration: Duration(milliseconds: 2750),
-              onChangeStatus: (status) {},
-              onHidden: () {});
-          _bloc.onClearErrors();
+            title: (state.failure as ServerFailure).title ?? "Error!",
+            context: context,
+            message:
+                (state.failure as ServerFailure).message ??
+                "Error; Undefined Message!",
+            duration: Duration(milliseconds: 2750),
+            onChangeStatus: (status) {},
+            onHidden: () {},
+          );
+          _bloc.add(AddNewBeneficiaryEvent.clearErrors());
         }
       },
-      child: BlocBuilder(
-        bloc: _bloc,
-        builder: (context, AddNewBeneficiaryState state) {
-          return Scaffold(
-              key: scaffoldState,
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(0.0),
-                  child: AppBar(
-                    backgroundColor: Color(0xffF8F7F7),
-                    elevation: 0.0,
-                  )),
-              body: OrientationBuilder(
-                builder: (BuildContext context, Orientation orientation) {
-                  if (MediaQuery.of(context).orientation ==
-                      Orientation.portrait) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          child: Column(children: [
-                            headerPage(),
-                            SizedBox(
-                              height: 35,
-                            ),
-                            formAddBeneficiary(state)
-                          ]),
-                        ),
+      builder: (BuildContext context, AddNewBeneficiaryState state) {
+        return Scaffold(
+          key: scaffoldState,
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(0.0),
+            child: AppBar(backgroundColor: Color(0xffF8F7F7), elevation: 0.0),
+          ),
+          body: OrientationBuilder(
+            builder: (BuildContext context, Orientation orientation) {
+              if (MediaQuery.of(context).orientation == Orientation.portrait) {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
                       ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Column(
                         children: [
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  headerPage(),
-                                  formAddBeneficiary(state)
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 12.0,
-                                  ),
-                                  formAddBeneficiary(state),
-                                  SizedBox(
-                                    height: 8.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          headerPage(),
+                          SizedBox(height: 35),
+                          formAddBeneficiary(state),
                         ],
                       ),
-                    );
-                  }
-                },
-              ));
-        },
-      ),
+                    ),
+                  ),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
+                        height: MediaQuery.of(context).size.height,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [headerPage(), formAddBeneficiary(state)],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
+                        height: MediaQuery.of(context).size.height,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 12.0),
+                              formAddBeneficiary(state),
+                              SizedBox(height: 8.0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -128,37 +118,32 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
     return Column(
       children: [
         InputTextField(
-            title: 'ss',
-            hintText: "Nickname",
-            inputType: TextInputType.number,
-            onSubmit: (val) {},
-            onChanged: _bloc.onNicknameChanged,
-            controller: nicknameController,
-            showError: state.errorNicknameValidation,
-            errorText: "Invalid input!",
-            prefixIcon: Icon(
-              Icons.text_fields,
-              size: 20.0,
-            )),
-        SizedBox(
-          height: 8.0,
+          title: 'ss',
+          hintText: "Nickname",
+          inputType: TextInputType.number,
+          onSubmit: (val) {},
+          onChanged:
+              (val) => _bloc.add(AddNewBeneficiaryEvent.nicknameChanged(val)),
+          controller: nicknameController,
+          showError: state.errorNicknameValidation,
+          errorText: "Invalid input!",
+          prefixIcon: Icon(Icons.text_fields, size: 20.0),
         ),
+        SizedBox(height: 8.0),
         InputTextField(
-            title: 'ss',
-            hintText: "Phone Number, ex: 552711410",
-            inputType: TextInputType.number,
-            onSubmit: (val) {},
-            onChanged: _bloc.onPhoneNumberChanged,
-            controller: phoneNumberController,
-            showError: state.errorPhoneNumberValidation,
-            errorText: "Invalid input!",
-            prefixIcon: Text(
-              "+971",
-              style: TextStyle(color: Colors.black),
-            )),
-        SizedBox(
-          height: 12.0,
+          title: 'ss',
+          hintText: "Phone Number, ex: 552711410",
+          inputType: TextInputType.number,
+          onSubmit: (val) {},
+          onChanged:
+              (val) =>
+                  _bloc.add(AddNewBeneficiaryEvent.phoneNumberChanged(val)),
+          controller: phoneNumberController,
+          showError: state.errorPhoneNumberValidation,
+          errorText: "Invalid input!",
+          prefixIcon: Text("+971", style: TextStyle(color: Colors.black)),
         ),
+        SizedBox(height: 12.0),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -167,7 +152,7 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
             child: SubmitButtonWidget(
               color: MAIN1,
               title: "Submit",
-              onTap: _bloc.onAddBeneficiary,
+              onTap: () => _bloc.add(AddNewBeneficiaryEvent.addBeneficiary()),
               isLoading: false,
             ),
           ),
@@ -179,16 +164,17 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
   Widget headerPage() {
     return Column(
       children: [
-        SizedBox(
-          height: 12.0,
-        ),
+        SizedBox(height: 12.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "Add Beneficiary",
               style: TextStyle(
-                  color: MAIN1, fontSize: 14.sp, fontWeight: FontWeight.bold),
+                color: MAIN1,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             InkWell(
               onTap: () => Navigator.pop(context),
@@ -196,7 +182,9 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: TEXT_FIELD_COLOR),
+                  shape: BoxShape.circle,
+                  color: TEXT_FIELD_COLOR,
+                ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5.0),
                   child: Center(
@@ -208,12 +196,10 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
-        SizedBox(
-          height: 6.0,
-        ),
+        SizedBox(height: 6.0),
         Container(
           width: MediaQuery.of(context).size.width,
           child: Text(
@@ -222,7 +208,7 @@ class _AddBeneficiaryPageState extends State<AddBeneficiaryPage>
             overflow: TextOverflow.ellipsis,
             style: TextStyle(color: DARK_OFF_FONT, fontSize: 15.0),
           ),
-        )
+        ),
       ],
     );
   }

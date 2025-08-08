@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:finance_house_test/core/util/helpers/generator_helper.dart';
+import 'package:finance_house_test/features/beneficiary_top_up/data/model/top_up_model.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/data/models/base_remote_datasource.dart';
-import '../../../../core/domain/entity/top_up_entity.dart';
 import '../../../../core/network/models/base_response_model.dart';
-import '../../domain/usecases/beneficiary_top_up_usecase.dart';
+import '../../domain/usecases/params/beneficiary_top_up_params.dart';
 
 abstract class BeneficiaryTopUpRemoteDataSource extends BaseRemoteDataSource {
-  Future<BaseResponseModel<TopUpEntity>> topUp(
+  Future<BaseResponseModel<TopUpModel>> topUp(
     BeneficiaryTopUpParams params,
     String token,
     String url,
@@ -20,7 +20,7 @@ class BeneficiaryTopUpRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
   BeneficiaryTopUpRemoteDataSourceImpl({required Dio dio}) : super(dio: dio);
 
   @override
-  Future<BaseResponseModel<TopUpEntity>> topUp(
+  Future<BaseResponseModel<TopUpModel>> topUp(
     BeneficiaryTopUpParams params,
     String token,
     String url,
@@ -31,9 +31,9 @@ class BeneficiaryTopUpRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
     ///
 
     return BaseResponseModel(
-      data: TopUpEntity(
+      data: TopUpModel(
         id: GeneratorHelper.generateRandomId(),
-        beneficiaryEntity: params.beneficiaryEntity,
+        beneficiaryModel: params.beneficiaryEntity,
         amount: params.amount,
         createdAt: DateTime.now(),
       ),

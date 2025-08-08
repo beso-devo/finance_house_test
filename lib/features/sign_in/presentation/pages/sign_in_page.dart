@@ -7,7 +7,6 @@ import '../../../../core/util/input_text_field.dart';
 import '../../../../core/util/mixin/flush_bar_mixin.dart';
 import '../../../../core/util/widgets/submit_button_widget.dart';
 import '../bloc/sign_in_bloc.dart';
-import '../bloc/sign_in_state.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -23,112 +22,102 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener(
+    return BlocConsumer(
       bloc: _bloc,
       listener: (BuildContext context, SignInState state) {
         if (state.userSignedIn) {
           Navigator.pushNamedAndRemoveUntil(
-              context, GeneralScreens.MAIN_PAGE, (route) => false);
+            context,
+            GeneralScreens.MAIN_PAGE,
+            (route) => false,
+          );
         }
         if (state.errorSignIn) {
           exceptionFlushBar(
-              title: "Error!",
-              context: context,
-              message: "The account is not exists!",
-              duration: Duration(milliseconds: 1750),
-              onChangeStatus: (status) {},
-              onHidden: () {
-                _bloc.onClear();
-              });
+            title: "Error!",
+            context: context,
+            message: "The account is not exists!",
+            duration: Duration(milliseconds: 1750),
+            onChangeStatus: (status) {},
+            onHidden: () {
+              _bloc.add(SignInEvent.clear());
+            },
+          );
         }
       },
-      child: BlocBuilder(
-        bloc: _bloc,
-        builder: (context, SignInState state) {
-          return Scaffold(
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(0.0),
-                  child: AppBar(
-                    backgroundColor: Color(0xffF8F7F7),
-                    elevation: 0.0,
-                  )),
-              body: OrientationBuilder(
-                builder: (BuildContext context, Orientation orientation) {
-                  bool isPortrait =
-                      orientation.toString() == 'Orientation.portrait';
-                  if (MediaQuery.of(context).orientation ==
-                      Orientation.landscape) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: headerLogin(),
-                            ),
-                          ),
-                          Container(
-                            width: (MediaQuery.of(context).size.width / 2) - 10,
-                            height: MediaQuery.of(context).size.height,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 12.0,
-                                  ),
-                                  formLogin(state),
-                                  SizedBox(
-                                    height: 8.0,
-                                  ),
-                                  // createAnAccount()
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+      builder: (BuildContext context, SignInState state) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(0.0),
+            child: AppBar(backgroundColor: Color(0xffF8F7F7), elevation: 0.0),
+          ),
+          body: OrientationBuilder(
+            builder: (BuildContext context, Orientation orientation) {
+              if (MediaQuery.of(context).orientation == Orientation.landscape) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
+                        height: MediaQuery.of(context).size.height,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: headerLogin(),
+                        ),
                       ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
+                      Container(
+                        width: (MediaQuery.of(context).size.width / 2) - 10,
                         height: MediaQuery.of(context).size.height,
                         child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
                           child: Column(
                             children: [
-                              headerLogin(),
-                              SizedBox(
-                                height: 50.0,
-                              ),
+                              SizedBox(height: 12.0),
                               formLogin(state),
+                              SizedBox(height: 8.0),
+                              // createAnAccount()
                             ],
                           ),
                         ),
                       ),
-                    );
-                  }
-                },
-              ));
-        },
-      ),
+                    ],
+                  ),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
+                      ),
+                      child: Column(
+                        children: [
+                          headerLogin(),
+                          SizedBox(height: 50.0),
+                          formLogin(state),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
   Widget headerLogin() {
     return Column(
       children: [
-        SizedBox(
-          height: 12.0,
-        ),
+        SizedBox(height: 12.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -137,17 +126,13 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
                 Text(
                   "Welcome Back!",
                   style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0),
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
                 ),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Image.asset(
-                  'assets/images/waving-hand.png',
-                  width: 30.0,
-                )
+                SizedBox(width: 10.0),
+                Image.asset('assets/images/waving-hand.png', width: 30.0),
               ],
             ),
             InkWell(
@@ -156,7 +141,9 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
                 height: 40,
                 width: 40,
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: TEXT_FIELD_COLOR),
+                  shape: BoxShape.circle,
+                  color: TEXT_FIELD_COLOR,
+                ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5.0),
                   child: Center(
@@ -168,12 +155,10 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
-        SizedBox(
-          height: 6.0,
-        ),
+        SizedBox(height: 6.0),
         Container(
           width: MediaQuery.of(context).size.width,
           child: Text(
@@ -182,7 +167,7 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(color: DARK_OFF_FONT, fontSize: 15.0),
           ),
-        )
+        ),
       ],
     );
   }
@@ -191,47 +176,44 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
     return Column(
       children: [
         InputTextField(
-            title: 'ss',
-            hintText: "Username",
-            inputType: TextInputType.name,
-            onSubmit: (val) {},
-            onChanged: _bloc.onChangedUserName,
-            controller: emailController,
-            showError: state.errorUserNameValidation,
-            errorText: "Invalid input!",
-            prefixIcon: Icon(
-              Icons.email,
-              size: 20.0,
-            )),
-        SizedBox(
-          height: 12.0,
+          title: 'ss',
+          hintText: "Username",
+          inputType: TextInputType.name,
+          onSubmit: (val) {},
+          onChanged: (val) => _bloc.add(SignInEvent.changingUserName(val)),
+          controller: emailController,
+          showError: state.errorUserNameValidation,
+          errorText: "Invalid input!",
+          prefixIcon: Icon(Icons.email, size: 20.0),
         ),
+        SizedBox(height: 12.0),
         InputTextField(
-            title: 'ss',
-            hintText: "Password",
-            inputType: TextInputType.name,
-            onSubmit: (val) {},
-            onChanged: _bloc.onChangedPassword,
-            controller: passwordController,
-            showError: state.errorPasswordValidation,
-            errorText: "Invalid input!",
-            obscureText: state.isSecureText,
-            suffixIcon: GestureDetector(
-              onTap: _bloc.onObscureChanged,
-              child: Icon(
-                state.isSecureText
-                    ? Icons.remove_red_eye
-                    : Icons.panorama_fish_eye,
-                color: DARK_OFF_FONT,
-              ),
+          title: 'ss',
+          hintText: "Password",
+          inputType: TextInputType.name,
+          onSubmit: (val) {},
+          onChanged: (val) => _bloc.add(SignInEvent.changingPassword(val)),
+          controller: passwordController,
+          showError: state.errorPasswordValidation,
+          errorText: "Invalid input!",
+          obscureText: state.isPasswordObscured,
+          suffixIcon: GestureDetector(
+            onTap:
+                () => _bloc.add(
+                  SignInEvent.passwordObscureChanging(
+                    !state.isPasswordObscured,
+                  ),
+                ),
+            child: Icon(
+              state.isPasswordObscured
+                  ? Icons.remove_red_eye
+                  : Icons.panorama_fish_eye,
+              color: DARK_OFF_FONT,
             ),
-            prefixIcon: Icon(
-              Icons.lock,
-              size: 20.0,
-            )),
-        SizedBox(
-          height: 12.0,
+          ),
+          prefixIcon: Icon(Icons.lock, size: 20.0),
         ),
+        SizedBox(height: 12.0),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
@@ -240,7 +222,7 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
             child: SubmitButtonWidget(
               color: MAIN1,
               title: "Submit",
-              onTap: _bloc.onSignInSubmit,
+              onTap: () => _bloc.add(SignInEvent.signingIn()),
               isLoading: state.isSigningIn,
             ),
           ),
@@ -269,7 +251,7 @@ class _SignInPageState extends State<SignInPage> with FlushBarMixin {
                 "Sign In",
                 style: TextStyle(color: MAIN1, fontSize: 16.0),
               ),
-            )
+            ),
           ],
         ),
       ),

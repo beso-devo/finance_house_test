@@ -1,17 +1,8 @@
-import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
+part of 'beneficiary_top_up_bloc.dart';
 
-abstract class BeneficiaryTopUpEvent {}
-
-class AmountChanged extends BeneficiaryTopUpEvent {
-  final String val;
-
-  AmountChanged(this.val);
+@freezed
+class BeneficiaryTopUpEvent with _$BeneficiaryTopUpEvent {
+  const factory BeneficiaryTopUpEvent.amountChanged(String val) = _AmountChanged;
+  const factory BeneficiaryTopUpEvent.topUpSubmit(BeneficiaryEntity beneficiaryEntity) = _TopUpSubmit;
+  const factory BeneficiaryTopUpEvent.clearErrors() = _ClearErrors;
 }
-
-class TopUpSubmit extends BeneficiaryTopUpEvent {
-  final BeneficiaryEntity beneficiaryEntity;
-
-  TopUpSubmit(this.beneficiaryEntity);
-}
-
-class ClearErrors extends BeneficiaryTopUpEvent {}

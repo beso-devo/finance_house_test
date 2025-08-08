@@ -1,3 +1,6 @@
-abstract class SplashEvent {}
+part of 'splash_bloc.dart';
 
-class InitializeApp extends SplashEvent {}
+@freezed
+class SplashEvent with _$SplashEvent {
+  const factory SplashEvent.initializeApp() = _InitializeApp;
+}

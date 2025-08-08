@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:injectable/injectable.dart';
 import '../../../../core/data/repository/base_repository.dart';
-import '../../../../core/domain/entity/beneficiary_entity.dart';
+import '../entity/beneficiary_entity.dart';
 import '../../../../core/error/failures.dart';
-import '../usecases/add_new_beneficiary_usecase.dart';
+import '../usecases/params/submit_new_beneficiary_params.dart';
 
 abstract class BeneficiaryRepository extends BaseRepository {
   Future<Either<Failure, BeneficiaryEntity>> addBeneficiary(SubmitNewBeneficiaryParams params);

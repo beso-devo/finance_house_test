@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../core/domain/entity/beneficiary_entity.dart';
+import '../entity/beneficiary_entity.dart';
 import '../../../../core/domain/usecases/usecase.dart';
 import '../../../../core/error/failures.dart';
+import 'params/submit_new_beneficiary_params.dart';
 import '../repository/add_new_beneficiary_repository.dart';
 
 @LazySingleton()
@@ -17,12 +18,4 @@ class AddNewBeneficiaryUseCase
       SubmitNewBeneficiaryParams params) async {
     return await addNewBeneficiaryRepository.addBeneficiary(params);
   }
-}
-
-class SubmitNewBeneficiaryParams {
-  String phoneNumber = "";
-  String nickname = "";
-
-  SubmitNewBeneficiaryParams(
-      {required this.phoneNumber, required this.nickname});
 }

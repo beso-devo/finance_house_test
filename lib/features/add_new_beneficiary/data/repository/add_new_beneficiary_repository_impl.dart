@@ -4,13 +4,14 @@ import 'package:dartz/dartz.dart';
 import 'package:finance_house_test/core/domain/entity/user_entity.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/data/models/base_local_data_source.dart';
+import '../../../../core/data/models/user_model.dart';
 import '../../../../core/data/repository/base_repository.dart';
-import '../../../../core/domain/entity/beneficiary_entity.dart';
+import '../../domain/entity/beneficiary_entity.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../../core/util/constants.dart';
 import '../../domain/repository/add_new_beneficiary_repository.dart';
-import '../../domain/usecases/add_new_beneficiary_usecase.dart';
+import '../../domain/usecases/params/submit_new_beneficiary_params.dart';
 import '../datasource/add_new_beneficiary_remote_datasource.dart';
 
 @LazySingleton(as: BeneficiaryRepository)
@@ -35,7 +36,7 @@ class BeneficiaryRepositoryImpl extends BaseRepositoryImpl
     /// Why we are passing the uRL in this step because maybe we have modes
     /// like dev, staging....etc
     final user = baseLocalDataSource.user;
-    UserEntity userE = UserEntity.fromJson(json.decode(user!));
+    UserModel userE = UserModel.fromJson(json.decode(user!));
 
     if (userE.beneficiariesCount >= 5) {
       return Left(

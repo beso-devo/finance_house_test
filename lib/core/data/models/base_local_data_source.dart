@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:finance_house_test/core/domain/entity/user_entity.dart';
+import 'package:finance_house_test/core/data/models/user_model.dart';
 import 'package:injectable/injectable.dart';
 import '../../data/shared_preferences_keys.dart';
 import '../../domain/usecases/logout.dart';
@@ -17,7 +17,7 @@ abstract class BaseLocalDataSource {
 
   Future<bool> logOutUser(LogOutParams params);
 
-  Future<UserEntity> saveUserInfo(UserEntity userEntity);
+  Future<UserModel> saveUserInfo(UserModel user);
 }
 
 @LazySingleton(as: BaseLocalDataSource)
@@ -58,10 +58,10 @@ class BaseLocalDataSourceImpl implements BaseLocalDataSource {
   int? get getUserId => sharedPreferences.getInt(SharedPreferencesKeys.ID);
 
   @override
-  Future<UserEntity> saveUserInfo(UserEntity userEntity) async {
-    await sharedPreferences.setInt(SharedPreferencesKeys.ID, userEntity.id);
-    String user = jsonEncode(userEntity.toJson(userEntity));
+  Future<UserModel> saveUserInfo(UserModel userModel) async {
+    await sharedPreferences.setInt(SharedPreferencesKeys.ID, userModel.id);
+    String user = jsonEncode(userModel.toJson(userModel));
     await sharedPreferences.setString(SharedPreferencesKeys.USER, user);
-    return userEntity;
+    return userModel;
   }
 }

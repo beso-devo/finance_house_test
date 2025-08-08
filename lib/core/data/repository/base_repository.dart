@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-
+import '../../domain/entity/user_entity.dart';
 import '../../domain/usecases/logout.dart';
 import '../../error/exceptions.dart';
 import '../../error/failures.dart';
@@ -11,13 +9,11 @@ import '../../network/network_info.dart';
 import '../../util/constants.dart';
 import '../models/base_local_data_source.dart';
 import '../models/base_remote_datasource.dart';
-import '../../domain/entity/user_entity.dart';
+import '../models/user_model.dart';
 
 typedef FutureEitherOr<T> = Future<Either<Failure, T>> Function();
-typedef FutureEitherOrWithToken<T> = Future<Either<Failure, T>> Function(
-  String token,
-  String url,
-);
+typedef FutureEitherOrWithToken<T> =
+    Future<Either<Failure, T>> Function(String token, String url);
 
 abstract class BaseRepository {
   Future<Either<Failure, T>> checkNetwork<T>(FutureEitherOr<T> body);
@@ -28,10 +24,11 @@ abstract class BaseRepository {
 
   Future<Either<Failure, UserEntity>> getCurrentUser();
 
-  Future<Either<Failure, UserEntity>> saveUserInfo(UserEntity userEntity);
+  Future<Either<Failure, UserEntity>> saveUserInfo(UserEntity user);
 
   Future<Either<Failure, T>> requestWithToken<T>(
-      FutureEitherOrWithToken<T> body);
+    FutureEitherOrWithToken<T> body,
+  );
 }
 
 /// [BaseRepositoryImpl] is the implementation of the [BaseRepository] interface
@@ -79,12 +76,9 @@ class BaseRepositoryImpl implements BaseRepository {
         final token = await getToken();
         final url = await baseLocalDataSource.url;
         print('token is $token');
-        return await token.fold(
-          (failure) => body('', url),
-          (token) async {
-            return body(token, url);
-          },
-        );
+        return await token.fold((failure) => body('', url), (token) async {
+          return body(token, url);
+        });
       } catch (e) {
         if (e is ServerException) {
           return Left(ServerFailure(e.errorCode));
@@ -100,8 +94,11 @@ class BaseRepositoryImpl implements BaseRepository {
   Future<Either<Failure, bool>> logOutUser(LogOutParams params) async {
     return requestWithToken((token, url) async {
       await baseLocalDataSource.logOutUser(params);
-      final result =
-          await baseRemoteDataSource!.logout("Bearer " + token, url, params);
+      final result = await baseRemoteDataSource!.logout(
+        "Bearer " + token,
+        url,
+        params,
+      );
       if (result.data == null) {
         return Left(ServerFailure(ErrorCode.SERVER_ERROR));
       } else {
@@ -112,16 +109,28 @@ class BaseRepositoryImpl implements BaseRepository {
 
   @override
   Future<Either<Failure, UserEntity>> getCurrentUser() async {
-    final user = baseLocalDataSource.user;
-    if (user?.isNotEmpty ?? false) {
-      return Right(UserEntity.fromJson(json.decode(user!)));
-    } else
+    try {
+      final userJsonString = baseLocalDataSource.user;
+      if (userJsonString != null && userJsonString.isNotEmpty) {
+        final Map<String, dynamic> userMap = json.decode(userJsonString);
+        final userModel = UserModel.fromJson(userMap);
+        return Right(userModel);
+      } else {
+        return Left(CacheFailure());
+      }
+    } catch (e) {
       return Left(CacheFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, UserEntity>> saveUserInfo(UserEntity userEntity) async {
-    final user = await baseLocalDataSource.saveUserInfo(userEntity);
-    return Right(user);
+  Future<Either<Failure, UserEntity>> saveUserInfo(UserEntity user) async {
+    try {
+      final userModel = UserModel.fromEntity(user);
+      await baseLocalDataSource.saveUserInfo(userModel);
+      return Right(user);
+    } catch (e) {
+      return Left(CacheFailure());
+    }
   }
 }

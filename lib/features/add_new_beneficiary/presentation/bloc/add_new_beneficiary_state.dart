@@ -1,39 +1,28 @@
-import 'package:built_value/built_value.dart';
-import 'package:finance_house_test/core/error/failures.dart';
 
-import '../../../../core/domain/entity/beneficiary_entity.dart';
-import '../../domain/usecases/add_new_beneficiary_usecase.dart';
+part of 'add_new_beneficiary_bloc.dart';
 
-part 'add_new_beneficiary_state.g.dart';
+@freezed
+class AddNewBeneficiaryState with _$AddNewBeneficiaryState {
+  const factory AddNewBeneficiaryState({
+    required bool errorPhoneNumberValidation,
+    required bool errorNicknameValidation,
+    required SubmitNewBeneficiaryParams submitNewBeneficiaryParams,
+    required bool isAddingBeneficiary,
+    required bool errorAddingBeneficiary,
+    required bool beneficiaryAdded,
+    BeneficiaryEntity? newBeneficiary,
+    Failure? failure,
+  }) = _AddNewBeneficiaryState;
 
-abstract class AddNewBeneficiaryState
-    implements Built<AddNewBeneficiaryState, AddNewBeneficiaryStateBuilder> {
-  AddNewBeneficiaryState._();
-
-  factory AddNewBeneficiaryState([updates(AddNewBeneficiaryStateBuilder b)]) =
-      _$AddNewBeneficiaryState;
-
-  bool get errorPhoneNumberValidation;
-  bool get errorNicknameValidation;
-
-  SubmitNewBeneficiaryParams get submitNewBeneficiaryParams;
-
-  bool get isAddingBeneficiary;
-  bool get errorAddingBeneficiary;
-  bool get beneficiaryAdded;
-  BeneficiaryEntity? get newBeneficiary;
-
-  Failure? get failure;
-
-
-  factory AddNewBeneficiaryState.initial() {
-    return AddNewBeneficiaryState((b) => b
-      ..errorPhoneNumberValidation = false
-      ..errorNicknameValidation = false
-      ..isAddingBeneficiary = false
-      ..errorAddingBeneficiary = false
-      ..beneficiaryAdded = false
-      ..submitNewBeneficiaryParams =
-          SubmitNewBeneficiaryParams(phoneNumber: "", nickname: ""));
-  }
+  factory AddNewBeneficiaryState.initial() => AddNewBeneficiaryState(
+    errorPhoneNumberValidation: false,
+    errorNicknameValidation: false,
+    submitNewBeneficiaryParams:
+    SubmitNewBeneficiaryParams(phoneNumber: "", nickname: ""),
+    isAddingBeneficiary: false,
+    errorAddingBeneficiary: false,
+    beneficiaryAdded: false,
+    newBeneficiary: null,
+    failure: null,
+  );
 }

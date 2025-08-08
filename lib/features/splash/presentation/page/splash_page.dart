@@ -5,7 +5,6 @@ import '../../../../core/di/injection_container.dart';
 import '../../../../core/util/colors.dart';
 import '../../../../core/util/generate_screen.dart';
 import '../bloc/splash_bloc.dart';
-import '../bloc/splash_state.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -15,12 +14,12 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final _bloc = getIt<SplashBloc>();
+  final _bloc = getIt<SplashCubit>();
 
   @override
   void initState() {
     Timer timer = new Timer(Duration(milliseconds: 1500), () async {
-      _bloc.onInitializeApp();
+      _bloc.add(SplashEvent.initializeApp());
     });
     super.initState();
   }

@@ -3,6 +3,7 @@ import 'package:finance_house_test/core/domain/entity/user_entity.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../core/domain/usecases/usecase.dart';
 import '../../../../core/error/failures.dart';
+import 'params/sign_in_params.dart';
 import '../repository/sign_in_repository.dart';
 
 @LazySingleton()
@@ -14,17 +15,5 @@ class SignInUseCase extends UseCase<UserEntity, SignInParams> {
   @override
   Future<Either<Failure, UserEntity>> call(SignInParams params) {
     return signInRepository.signIn(params.email, params.password);
-  }
-}
-
-class SignInParams {
-  String email = '';
-  String password = '';
-
-  SignInParams(this.email, this.password);
-
-  @override
-  String toString() {
-    return 'SignInParams{email: $email, password: $password}';
   }
 }

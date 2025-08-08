@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
+import 'package:finance_house_test/features/add_new_beneficiary/domain/entity/beneficiary_entity.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/domain/usecases/usecase.dart';
 import '../../../../core/error/failures.dart';
-import '../repository/dealer_main_repository.dart';
+import '../repository/main_page_repository.dart';
 
 @LazySingleton()
 class GetBeneficiariesUseCase extends UseCase<List<BeneficiaryEntity>, NoParams> {

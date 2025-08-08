@@ -25,7 +25,7 @@ enum ErrorCode {
   ERROR_ADD_BENEFICIARY,
   INSUFFICIENT_BALANCE,
   MAXIMUM_BENEFICIARIES,
-  MAXIMUM_TOP_UP
+  MAXIMUM_TOP_UP,
 }
 
 class GetOptions {
@@ -49,3 +49,5 @@ class GetOptions {
     return options;
   }
 }
+
+num appFees = 3;

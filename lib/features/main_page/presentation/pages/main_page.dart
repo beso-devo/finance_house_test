@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/di/injection_container.dart';
+import '../../../beneficiary_top_up/domain/entity/top_up_entity.dart';
 import '../bloc/main_page_bloc.dart';
-import '../bloc/main_page_state.dart';
 import '../widgets/beneficiary_card.dart';
 import '../widgets/history_item_widget.dart';
 
@@ -23,13 +23,13 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
 
   @override
   void initState() {
-    _bloc.onInitializePage();
+    _bloc.add(MainPageEvent.initializePage());
     super.initState();
   }
 
   @override
   Widget build(BuildContext mainContext) {
-    return BlocListener(
+    return BlocConsumer(
       bloc: _bloc,
       listener: (BuildContext context, MainPageState state) {
         if (state.newBeneficiaryAdded) {
@@ -41,58 +41,57 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
             backgroundColor: Colors.green,
             onChangeStatus: (status) {},
           );
-          _bloc.onClearErrors();
+          _bloc.add(MainPageEvent.clearErrors());
         }
       },
-      child: BlocBuilder(
-        bloc: _bloc,
-        builder: (BuildContext context, MainPageState state) {
-          return Scaffold(
-            backgroundColor: Color(0xFFF9F9F9),
-            appBar: AppBar(
-              backgroundColor: TEXT_FIELD_COLOR,
-              centerTitle: false,
-              title: Text(
-                "Beneficiaries",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: MAIN1,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "Lobster",
-                ),
+      builder: (BuildContext context, MainPageState state) {
+        return Scaffold(
+          backgroundColor: Color(0xFFF9F9F9),
+          appBar: AppBar(
+            backgroundColor: TEXT_FIELD_COLOR,
+            centerTitle: false,
+            title: Text(
+              "Beneficiaries",
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: MAIN1,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Lobster",
               ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      GeneralScreens.ADD_BENEFICIARY,
-                    ).then((value) {
-                      if (value != null &&
-                          (value as Map)["beneficiary"] != null) {
-                        _bloc.onAddNewBeneficiary((value)["beneficiary"]);
-                      }
-                    });
-                  },
-                  icon: Icon(Icons.add, color: MAIN1),
-                ),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    GeneralScreens.ADD_BENEFICIARY,
+                  ).then((value) {
+                    if (value != null &&
+                        (value as Map)["beneficiary"] != null) {
+                      _bloc.add(
+                        MainPageEvent.addBeneficiary((value)["beneficiary"]),
+                      );
+                    }
+                  });
+                },
+                icon: Icon(Icons.add, color: MAIN1),
+              ),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Column(
+              children: [
+                balanceWidget(state, context),
+                SizedBox(height: 10),
+                beneficiariesWidget(state),
+                SizedBox(height: 10),
+                getHistoryWidget(state),
               ],
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: Column(
-                children: [
-                  balanceWidget(state, context),
-                  SizedBox(height: 10),
-                  beneficiariesWidget(state),
-                  SizedBox(height: 10),
-                  getHistoryWidget(state),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -113,7 +112,8 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
         itemBuilder: (BuildContext context, int index) {
           return BeneficiaryCard(
             beneficiaryEntity: state.beneficiaries[index],
-            onTopUpAdded: _bloc.onTopUpAdded,
+            onTopUpAdded:
+                (TopUpEntity val) => _bloc.add(MainPageEvent.topUpAdded(val)),
           );
         },
       ),
@@ -134,16 +134,28 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
                       horizontal: 10.0,
                       vertical: 10,
                     ),
-                    child: Text(
-                      "History Top UPs, Total: (${state.historyTopUPs.fold<double>(
-                        0.0,
-                            (sum, topUp) => sum + topUp.amount,
-                      )} AED)",
-                      style: TextStyle(
-                        color: MAIN1,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                      children: [
+                        Text(
+                          "History Top UPs",
+                          style: TextStyle(
+                            color: MAIN1,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        Text(
+                          "Total: (${state.historyTopUPs.fold<double>(0.0, (sum, topUp) => sum + topUp.amount)} AED)",
+                          style: TextStyle(
+                            color: MAIN2,
+                            fontSize: 9.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   )
                   : Container(),

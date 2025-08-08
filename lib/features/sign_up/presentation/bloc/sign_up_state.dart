@@ -1,55 +1,39 @@
-import 'package:built_value/built_value.dart';
+part of 'sign_up_bloc.dart';
 
-import '../../domain/usecases/sign_up_usecase.dart';
-
-part 'sign_up_state.g.dart';
-
-abstract class SignUpState implements Built<SignUpState, SignUpStateBuilder> {
-  SignUpState._();
-
-  factory SignUpState([updates(SignUpStateBuilder b)]) = _$SignUpState;
+@freezed
+class SignUpState with _$SignUpState {
+  const factory SignUpState({
+    required bool errorEmailValidation,
+    required bool errorPhoneNumberValidation,
+    required bool errorPasswordValidation,
+    required bool errorConfirmPasswordValidation,
+    required bool isPasswordObscured,
+    required bool isConfirmPasswordObscured,
+    required bool isSigningUp,
+    required bool errorInSigningUp,
+    required bool userSignedUp,
+    required bool errorLatLongValidation,
+    required SignUpParams signUpParams,
+  }) = _SignUpState;
 
   factory SignUpState.initial() {
     return SignUpState(
-      (b) => b
-        ..errorEmailValidation = false
-        ..errorPhoneNumberValidation = false
-        ..errorPasswordValidation = false
-        ..errorConfirmPasswordValidation = false
-        ..isPasswordObscured = true
-        ..isConfirmPasswordObscured = true
-        ..isSigningUp = false
-        ..errorInSigningUp = false
-        ..userSignedUp = false
-        ..errorLatLongValidation = false
-        ..signUpParams = SignUpParams(
-            email: '',
-            password: '',
-            confirmPassword: '',
-            phoneNumber: '',),
+      errorEmailValidation: false,
+      errorPhoneNumberValidation: false,
+      errorPasswordValidation: false,
+      errorConfirmPasswordValidation: false,
+      isPasswordObscured: true,
+      isConfirmPasswordObscured: true,
+      isSigningUp: false,
+      errorInSigningUp: false,
+      userSignedUp: false,
+      errorLatLongValidation: false,
+      signUpParams: const SignUpParams(
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phoneNumber: '',
+      ),
     );
   }
-
-
-  bool get errorEmailValidation;
-
-  bool get errorPhoneNumberValidation;
-
-  bool get errorPasswordValidation;
-
-  bool get errorConfirmPasswordValidation;
-
-  bool get isPasswordObscured;
-
-  bool get isConfirmPasswordObscured;
-
-  bool get isSigningUp;
-
-  bool get errorInSigningUp;
-
-  bool get userSignedUp;
-
-  bool get errorLatLongValidation;
-
-  SignUpParams get signUpParams;
 }

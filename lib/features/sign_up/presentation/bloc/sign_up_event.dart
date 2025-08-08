@@ -1,43 +1,15 @@
-abstract class SignUpEvent {}
+part of 'sign_up_bloc.dart';
 
-class EmailChanging extends SignUpEvent {
-  final String val;
-
-  EmailChanging(this.val);
+@freezed
+class SignUpEvent with _$SignUpEvent {
+  const factory SignUpEvent.emailChanging(String val) = _EmailChanging;
+  const factory SignUpEvent.passwordChanging(String val) = _PasswordChanging;
+  const factory SignUpEvent.confirmPasswordChanging(String val) = _ConfirmPasswordChanging;
+  const factory SignUpEvent.phoneNumberChanging(String val) = _PhoneNumberChanging;
+  const factory SignUpEvent.passwordObscureChanging(bool isSecure) = _PasswordObscureChanging;
+  const factory SignUpEvent.confirmPasswordObscureChanging(bool isSecure) = _ConfirmPasswordObscureChanging;
+  const factory SignUpEvent.continueAsGuest() = _ContinueAsGuest;
+  const factory SignUpEvent.signingUp() = _SigningUp;
+  const factory SignUpEvent.saveUserInfo(UserEntity userInfo) = _SaveUserInfo;
+  const factory SignUpEvent.clear() = _Clear;
 }
-
-class PasswordChanging extends SignUpEvent {
-  final String val;
-
-  PasswordChanging(this.val);
-}
-
-class ConfirmPasswordChanging extends SignUpEvent {
-  final String val;
-
-  ConfirmPasswordChanging(this.val);
-}
-
-class PhoneNumberChanging extends SignUpEvent {
-  final String val;
-
-  PhoneNumberChanging(this.val);
-}
-
-class PasswordObscureChanging extends SignUpEvent {
-  final bool isSecure;
-
-  PasswordObscureChanging(this.isSecure);
-}
-
-class ConfirmPasswordObscureChanging extends SignUpEvent {
-  final bool isSecure;
-
-  ConfirmPasswordObscureChanging(this.isSecure);
-}
-
-class ContinueAsGuest extends SignUpEvent {}
-
-class SigningUp extends SignUpEvent {}
-
-class Clear extends SignUpEvent {}

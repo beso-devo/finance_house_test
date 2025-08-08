@@ -1,38 +1,26 @@
-import 'package:built_value/built_value.dart';
+part of 'sign_in_bloc.dart';
 
-import '../../domain/usecases/sign_in_usecase.dart';
-
-part 'sign_in_state.g.dart';
-
-abstract class SignInState implements Built<SignInState, SignInStateBuilder> {
-  SignInState._();
-
-  bool get errorUserNameValidation;
-
-  bool get errorPasswordValidation;
-
-  bool get errorSignIn;
-
-  bool get isSecureText;
-
-  bool get isSigningIn;
-
-  bool get userSignedIn;
-
-  SignInParams get signInParams;
-
-  factory SignInState([updates(SignInStateBuilder b)]) = _$SignInState;
+@freezed
+class SignInState with _$SignInState {
+  const factory SignInState({
+    required bool errorUserNameValidation,
+    required bool errorPasswordValidation,
+    required bool errorSignIn,
+    required bool isPasswordObscured,
+    required bool isSigningIn,
+    required bool userSignedIn,
+    required SignInParams signInParams,
+  }) = _SignInState;
 
   factory SignInState.initial() {
-    return SignInState(
-      (b) => b
-        ..errorUserNameValidation = false
-        ..errorPasswordValidation = false
-        ..errorSignIn = false
-        ..isSecureText = true
-        ..isSigningIn = false
-        ..userSignedIn = false
-        ..signInParams = new SignInParams('', ''),
+    return const SignInState(
+      errorUserNameValidation: false,
+      errorPasswordValidation: false,
+      errorSignIn: false,
+      isPasswordObscured: true,
+      isSigningIn: false,
+      userSignedIn: false,
+      signInParams: SignInParams(email: '', password: ''),
     );
   }
 }

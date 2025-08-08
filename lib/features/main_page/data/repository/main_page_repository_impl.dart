@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
+import 'package:finance_house_test/features/add_new_beneficiary/domain/entity/beneficiary_entity.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../core/data/repository/base_repository.dart';
 import '../../../../../core/network/network_info.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/util/constants.dart';
-import '../../domain/repository/dealer_main_repository.dart';
+import '../../domain/repository/main_page_repository.dart';
 import '../datasource/main_page_local_datasource.dart';
 import '../datasource/main_page_remote_datasource.dart';
 
