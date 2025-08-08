@@ -5,5 +5,8 @@ import '../../../../core/error/failures.dart';
 import '../usecases/beneficiary_top_up_usecase.dart';
 
 abstract class BeneficiaryTopUpRepository extends BaseRepository {
+  /// if the id is null means give me all transactions amount.
+  Future<double> getMonthlyTopUp({String? beneficiaryId});
+
   Future<Either<Failure, TopUpEntity>> topUp(BeneficiaryTopUpParams params);
 }

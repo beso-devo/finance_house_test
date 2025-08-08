@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:finance_house_test/core/domain/entity/beneficiary_entity.dart';
+import 'package:finance_house_test/core/util/helpers/generator_helper.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/data/models/base_remote_datasource.dart';
 import '../../../../core/network/models/base_response_model.dart';
@@ -27,6 +28,6 @@ class AddNewBeneficiaryRemoteDataSourceImpl extends BaseRemoteDataSourceImpl
         data: BeneficiaryEntity(
             phoneNumber: "+971" + params.phoneNumber,
             nickName: params.nickname,
-            id: 1));
+            id: GeneratorHelper.generateRandomId()));
   }
 }

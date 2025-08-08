@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/data/models/base_local_data_source.dart';
 import '../../../../core/data/repository/base_repository.dart';
-import '../../../../core/domain/entity/beneficiary_entity.dart';
 import '../../../../core/domain/entity/top_up_entity.dart';
 import '../../../../core/domain/entity/user_entity.dart';
 import '../../../../core/error/failures.dart';
@@ -17,6 +16,11 @@ import '../datasource/beneficiary_top_up_remote_datasource.dart';
 class BeneficiaryTopUpRepositoryImpl extends BaseRepositoryImpl
     implements BeneficiaryTopUpRepository {
   final BeneficiaryTopUpRemoteDataSource addNewBeneficiaryRemoteDataSource;
+
+  /// This object, I'm using it to store all top up transactions as local store
+  /// We have many ways to store the transactions...
+  ///
+  final Map<String, List<TopUpEntity>> _topUps = {};
 
   BeneficiaryTopUpRepositoryImpl({
     required this.addNewBeneficiaryRemoteDataSource,
@@ -76,69 +80,10 @@ class BeneficiaryTopUpRepositoryImpl extends BaseRepositoryImpl
       ///
       /// I'll not reflect the checking cases into the UI since the idea is clear.
       ///
+      ///
+      final key = '${params.beneficiaryEntity.id}';
+      _topUps.putIfAbsent(key, () => []);
 
-      final user = baseLocalDataSource.user;
-      UserEntity currentUser = UserEntity.fromJson(json.decode(user!));
-      Map<int, num> beneficiariesAmounts = {};
-      num totalAmount = 0.0;
-      List<TopUpEntity> histories = [
-        TopUpEntity(
-          id: 1,
-          beneficiaryEntity: BeneficiaryEntity(
-            id: 1,
-            nickName: 'Basel',
-            phoneNumber: '+971552711410',
-          ),
-          amount: 15.2,
-        ),
-        TopUpEntity(
-          id: 2,
-          beneficiaryEntity: BeneficiaryEntity(
-            id: 2,
-            nickName: 'Islam',
-            phoneNumber: '+971553434342',
-          ),
-          amount: 30.5,
-        ),
-        TopUpEntity(
-          id: 3,
-          beneficiaryEntity: BeneficiaryEntity(
-            id: 3,
-            nickName: 'Alaa',
-            phoneNumber: '+9715523112121',
-          ),
-          amount: 25.4,
-        ),
-        TopUpEntity(
-          id: 1,
-          beneficiaryEntity: BeneficiaryEntity(
-            id: 1,
-            nickName: 'Basel',
-            phoneNumber: '+971552711410',
-          ),
-          amount: 100.85,
-        ),
-      ];
-      histories.forEach((element) {
-        totalAmount = totalAmount + element.amount;
-        if (beneficiariesAmounts.containsKey(element.beneficiaryEntity.id)) {
-          beneficiariesAmounts[element.beneficiaryEntity.id] =
-              beneficiariesAmounts[element.beneficiaryEntity.id]! +
-              element.amount;
-        } else {
-          beneficiariesAmounts[element.beneficiaryEntity.id] = element.amount;
-        }
-      });
-      print(
-        "Cluster Depending on the beneficiaries' ids = " +
-            beneficiariesAmounts.toString(),
-      );
-      print("Total Top UPs = " + totalAmount.toString());
-      print("User Verification Status = ${currentUser.isVerified}");
-
-      /// Each transaction should deduct 3 AED from user balance...
-      userE.balance = (userE.balance - params.amount) - 3;
-      await baseLocalDataSource.saveUserInfo(userE);
       return requestWithToken((token, url) async {
         final result = await addNewBeneficiaryRemoteDataSource.topUp(
           params,
@@ -148,9 +93,40 @@ class BeneficiaryTopUpRepositoryImpl extends BaseRepositoryImpl
         if (result.data == null) {
           return Left(ServerFailure(ErrorCode.SERVER_ERROR));
         } else {
+          /// Each transaction should deduct 3 AED from user balance...
+          userE.balance = (userE.balance - params.amount) - 3;
+          await baseLocalDataSource.saveUserInfo(userE);
+
+          /// add the top up transaction to the local store to make business logic on it...
+          _topUps[key]!.add(result.data!);
+
           return Right(result.data!);
         }
       });
     }
+  }
+
+  @override
+  Future<double> getMonthlyTopUp({String? beneficiaryId}) async {
+    final now = DateTime.now();
+
+    List filteredRecords = [];
+
+    if (beneficiaryId == null) {
+      // Combine all transactions from all beneficiaries
+      filteredRecords = _topUps.values
+          .expand((records) => records)
+          .where((r) => r.createdAt.year == now.year && r.createdAt.month == now.month)
+          .toList();
+    } else {
+      // Filter by specific beneficiaryId
+      final key = beneficiaryId;
+      filteredRecords = _topUps[key]
+          ?.where((r) => r.createdAt.year == now.year && r.createdAt.month == now.month)
+          .toList() ??
+          [];
+    }
+
+    return filteredRecords.fold<double>(0.0, (sum, r) => sum + r.amount);
   }
 }

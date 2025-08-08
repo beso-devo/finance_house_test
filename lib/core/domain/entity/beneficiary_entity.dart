@@ -1,7 +1,7 @@
 class BeneficiaryEntity {
   static String className = "BeneficiaryEntity";
 
-  final int id;
+  final String id;
   final String nickName;
   final String phoneNumber;
 
