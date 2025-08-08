@@ -71,6 +71,7 @@ function from that class so it'll reflected in the all widgets inside the projec
    ```bash
    git clone https://github.com/beso-devo/finance_house_test.git
    cd finance_house_test
+   ```
    
 2. **Ensure Flutter environment**
 
@@ -80,16 +81,20 @@ You can install Flutter or switch versions by following the official guide: Flut
 
 To check your Flutter and Dart version:
 
-```flutter --version```
-
+   ```bash
+   flutter --version
+   ```
+   
 3. **Install dependencies**
 
 Run the following command in the project root to get all required packages:
 
-```flutter pub get```
-
+   ```bash
+   flutter pub get
+   ```
 4. **Run the app**
 
 Connect a device or start an emulator, then run:
-
-```flutter run```
+   ```bash
+   flutter run
+   ```
