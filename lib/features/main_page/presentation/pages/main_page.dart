@@ -139,14 +139,13 @@ class _MainPageState extends State<MainPage> with FlushBarMixin {
 
                       children: [
                         Text(
-                          "History Top UPs",
+                          "Top Up History",
                           style: TextStyle(
                             color: MAIN1,
                             fontSize: 12.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
                         Text(
                           "Total: (${state.historyTopUPs.fold<double>(0.0, (sum, topUp) => sum + topUp.amount)} AED)",
                           style: TextStyle(

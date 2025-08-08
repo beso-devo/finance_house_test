@@ -132,7 +132,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         );
       },
       (userInfo) async {
-        await saveUserInfoUseCase(userInfo);
+        add(SignUpEvent.saveUserInfo(userInfo));
         emit(
           state.copyWith(
             isSigningUp: false,
