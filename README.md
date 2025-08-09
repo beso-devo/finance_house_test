@@ -38,7 +38,8 @@ A Flutter project demonstrating user verification flows with demo videos for ver
 ---
 
 ## Assumptions
-# Git commit - Old BloC version uses
+
+# Old BloC version uses
 
 You can check this commit I was using the old way to yeild the states and old approach
 I upgraded it to be on latest version and also we have another way like using cubits.
@@ -70,6 +71,9 @@ the all TextFields to put the validations on the all of them and once we modifie
 function from that class so it'll reflected in the all widgets inside the project
 (that's using that function), and for sure it'll not be the final code for it.
 
+# Dio Interceptor
+We should use the interceptor for listing on each request in the application like token
+expiration and other cases but now because it's an assessment I disabled it.
 
 ## Setup Instructions
 
